@@ -1,6 +1,3 @@
-// eslint-disable-next-line
-/// <reference path="./image.d.ts" />
-
 import React, {
   useState,
   useContext,
@@ -49,6 +46,7 @@ import MicroPageCore from 'micro-page-core';
 import { UpdatePage } from 'micro-page-core/es/Service';
 import { Page, Template, Field, FieldType } from 'micro-page-core/es/typings';
 import { typeOptions } from 'micro-page-core/es/constant';
+import './image';
 import { ReactComponent as Stringsvg } from './assets/string.svg';
 import { ReactComponent as Numbersvg } from './assets/number.svg';
 import { ReactComponent as Datesvg } from './assets/date.svg';

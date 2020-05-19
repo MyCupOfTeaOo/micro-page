@@ -1,6 +1,5 @@
-// eslint-disable-next-line
-/// <reference path="./image.d.ts" />
 import { Config, Template } from './typings';
+import './image';
 import coverImg from './assets/cover.jpg';
 import { PluginContext } from './Plugin';
 
