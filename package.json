@@ -4,6 +4,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna link && father build",
+    "publish:all": "npm run build && lerna publish",
     "postpublish": "rimraf ./packages/*/*tgz",
     "lint:ts": "tslint \"packages/**/*.ts\" \"packages/**/*.tsx\"",
     "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./packages",
