@@ -1,6 +1,6 @@
 {
   "name": "micro-page-plugin-preset",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "react page configurable plugin",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -36,14 +36,15 @@
     "@types/react-dom": "^16.9.2",
     "@types/react-router": "5.1.5",
     "@types/react-router-dom": "5.1.3",
+    "@types/react-syntax-highlighter": "^11.0.4",
     "antd": "^4.1.5",
     "array-move": "^2.2.1",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "expect.js": "^0.3.1",
     "lodash-es": "^4.17.15",
-    "micro-page-core": "^0.0.7",
-    "micro-page-react": "^0.0.7",
+    "micro-page-core": "^0.0.8",
+    "micro-page-react": "^0.0.8",
     "mobx": "^5.14.2",
     "mobx-react": "^6.1.4",
     "react": "^16.10.2",
@@ -52,10 +53,9 @@
     "react-router-dom": "5.1.2",
     "react-sortable-hoc": "^1.11.0",
     "react-spring": "^8.0.27",
+    "react-syntax-highlighter": "^12.2.1",
     "tea-eval": "0.0.6",
-    "teaness": "^4.0.11",
-    "@types/react-syntax-highlighter": "^11.0.4",
-    "react-syntax-highlighter": "^12.2.1"
+    "teaness": "^4.0.11"
   },
   "gitHead": "a53b62eb0be71668dc7cf0d47a3266dbb7cc950b"
 }

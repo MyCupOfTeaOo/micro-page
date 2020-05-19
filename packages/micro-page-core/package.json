@@ -1,6 +1,6 @@
 {
   "name": "micro-page-core",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "core",
   "main": "./es/index.js",
   "module": "./es/index.js",
