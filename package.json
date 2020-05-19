@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --hoist",
     "build": "lerna link && father build",
     "publish:all": "npm run build && lerna publish",
     "postpublish": "rimraf ./packages/*/*tgz",

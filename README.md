@@ -9,8 +9,6 @@
 
 ## Getting Started
 
-> 暂未发包,仅供参考
-
 - 安装依赖 `npm i -S micro-page-core micro-page-react micro-page-plugin-preset`
 
 ## 在 react 中使用
