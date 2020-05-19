@@ -47,13 +47,13 @@ import { UpdatePage } from 'micro-page-core/es/Service';
 import { Page, Template, Field, FieldType } from 'micro-page-core/es/typings';
 import { typeOptions } from 'micro-page-core/es/constant';
 import './image';
-import { ReactComponent as Stringsvg } from './assets/string.svg';
-import { ReactComponent as Numbersvg } from './assets/number.svg';
-import { ReactComponent as Datesvg } from './assets/date.svg';
-import { ReactComponent as Timesvg } from './assets/time.svg';
-import { ReactComponent as Imagesvg } from './assets/image.svg';
-import { ReactComponent as Filesvg } from './assets/file.svg';
-import { ReactComponent as Richtextsvg } from './assets/richtext.svg';
+import Stringsvg from './assets/string.svg';
+import Numbersvg from './assets/number.svg';
+import Datesvg from './assets/date.svg';
+import Timesvg from './assets/time.svg';
+import Imagesvg from './assets/image.svg';
+import Filesvg from './assets/file.svg';
+import Richtextsvg from './assets/richtext.svg';
 import coverImg from './assets/cover.jpg';
 import {
   useModal,
