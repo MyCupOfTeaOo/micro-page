@@ -548,7 +548,7 @@ export const formFuncMap: {
           },
         );
       }
-      const { data } = this.config?.funcProps;
+      const { data } = this.config?.funcProps || {};
       let parseData;
       if (data) {
         parseData = safeParse(

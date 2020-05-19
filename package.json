@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --force-local",
     "build": "father build",
     "prepublishOnly": "father build",
     "postpublish": "rimraf ./packages/*/*tgz",
@@ -22,6 +22,8 @@
     "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
     "@typescript-eslint/typescript-estree": "^2.10.0",
@@ -37,8 +39,10 @@
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.1.2",
     "eslint-plugin-unicorn": "^12.1.0",
+    "father": "^2.29.3",
     "lerna": "^3.21.0",
     "lint-staged": "^9.4.2",
+    "node-sass": "^4.14.1",
     "prettier": "^1.19.1",
     "prettier-eslint": "^9.0.0",
     "prettier-eslint-cli": "^5.0.0",
