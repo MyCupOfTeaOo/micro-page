@@ -2,9 +2,8 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap --force-local",
-    "build": "father build",
-    "prepublishOnly": "father build",
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna link && father build",
     "postpublish": "rimraf ./packages/*/*tgz",
     "lint:ts": "tslint \"packages/**/*.ts\" \"packages/**/*.tsx\"",
     "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./packages",
@@ -52,5 +51,10 @@
     "tslint-react": "^4.1.0",
     "typescript": "^3.9.2",
     "yorkie": "^2.0.0"
+  },
+  "dependencies": {
+    "micro-page-core": "file:packages\\micro-page-core",
+    "micro-page-plugin-preset": "file:packages\\micro-page-plugin-preset",
+    "micro-page-react": "file:packages\\micro-page-react"
   }
 }
