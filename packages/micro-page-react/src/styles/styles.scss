@@ -1,0 +1,445 @@
+$primary-color: #1890ff;
+$text-color: rgba(0, 0, 0, 1);
+@import './colors.scss';
+@import './utils.scss';
+@import './other.scss';
+
+$card-width: 240px;
+$border-color: #dfdbdb;
+$shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12),
+  0 5px 12px 4px rgba(0, 0, 0, 0.09);
+$focus-shadow: 0 1px 2px -2px rgba(
+      $color: $blue-3,
+      $alpha: 0.8,
+    ),
+  0 3px 6px 0
+    rgba(
+      $color: $blue-3,
+      $alpha: 0.74,
+    ),
+  0 5px 12px 4px
+    rgba(
+      $color: $blue-3,
+      $alpha: 0.6,
+    );
+$padding: 24px;
+$tiny-padding: $padding / 4;
+$small-padding: $padding / 2;
+$big-padding: $padding * 2;
+$header-height: 48px;
+
+$danger: $red-5;
+$warning: $volcano-5;
+$success: $green-5;
+
+.small-text {
+  font-size: 12px;
+}
+
+.danger {
+  color: $danger;
+}
+
+.warning {
+  color: $warning;
+}
+.success {
+  color: $green-5;
+}
+
+.primary {
+  color: $primary-color;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.desc {
+  color: rgba($color: $text-color, $alpha: 0.65);
+}
+.text-muti-line {
+  word-break: break-all;
+}
+
+.margin-none {
+  margin: 0 !important;
+}
+
+.search-btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & > * {
+    margin: 0 6px;
+  }
+}
+
+.scroll {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgba($color: #000000, $alpha: 0);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(25, 31, 37, 0.4);
+    border-radius: 8px;
+    &:hover {
+      background: rgba(25, 31, 37, 0.72);
+    }
+  }
+}
+
+.mycode {
+  code {
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+    background: #f6f7f9;
+    color: #07a;
+    border-radius: 3px;
+  }
+  pre {
+    color: #000;
+    background: #f6f7f9;
+  }
+  code,
+  pre,
+  tt {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+}
+
+.micro-layout {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  h1 {
+    color: rgba($color: $text-color, $alpha: 0.85);
+    font-size: 38px;
+    font-weight: 600;
+    line-height: 1.23;
+  }
+  h2 {
+    color: rgba($color: $text-color, $alpha: 0.85);
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 1.35;
+  }
+  h3 {
+    color: rgba($color: $text-color, $alpha: 0.85);
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 1.35;
+  }
+  h4 {
+    color: rgba($color: $text-color, $alpha: 0.85);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.4;
+  }
+  * {
+    @extend .scroll;
+    align-content: baseline;
+  }
+}
+.micro-header {
+  transition: all 0.4s;
+  flex: 0 1;
+  box-shadow: $shadow;
+  z-index: 19;
+  background-color: #fff;
+  &.micro-header-shrink {
+    flex: 0 0 0px !important;
+    padding: 20px;
+  }
+}
+
+.micro-header-shrink-btn {
+  position: absolute;
+  right: 0;
+  transform: translateY(-100%);
+}
+
+.micro-header-goback-btn {
+  position: absolute;
+  right: 0;
+}
+
+.micro-main {
+  flex: 1 1 auto;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+.micro-main-project {
+  flex-direction: row;
+
+  .micro-header {
+    $content-width: 178px;
+    overflow: hidden;
+    flex: 0 0 $content-width + $padding * 2;
+    display: flex;
+    flex-direction: column;
+
+    .ant-page-header-heading-extra {
+      width: 100%;
+      & > div {
+        margin: 0;
+      }
+    }
+    .done {
+      float: right;
+    }
+    .ant-page-header-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .micro-desc {
+      flex: 1 1 auto;
+      margin: $small-padding 0;
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        width: 0;
+        height: 8;
+      }
+    }
+    .micro-header-img {
+      flex: 0 1 auto;
+    }
+  }
+  .micro-body {
+    flex: 1 1 auto;
+  }
+}
+
+.micro-card {
+  border-color: $border-color;
+  flex: 0 0 auto;
+  width: $card-width + 2;
+  height: $card-width * 1.25;
+  border: 1px solid $border-color;
+  cursor: pointer;
+  margin: $small-padding;
+  display: flex;
+  flex-direction: column;
+  .cover {
+    width: 100%;
+    height: $card-width;
+  }
+  .content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0 $small-padding;
+    & > * {
+      width: 100%;
+      margin: 0;
+    }
+  }
+  transition: all 0.2s;
+  &:hover {
+    box-shadow: $shadow;
+  }
+  &.micro-card-small {
+    width: $card-width / 2 + 2;
+    height: $card-width * 1.25 / 2;
+    .cover {
+      width: 100%;
+      height: $card-width / 2;
+    }
+  }
+  &.micro-card-selected {
+    position: relative;
+    overflow: hidden;
+    box-shadow: $focus-shadow;
+    &::after {
+      padding: 0 $padding;
+      content: ' 已选中';
+      display: block;
+      position: absolute;
+      right: -24px;
+      top: 8px;
+      background-color: $green-3;
+      transform: rotate(45deg);
+    }
+  }
+}
+
+.vertical-center {
+  display: flex;
+  align-items: center;
+}
+
+.horizontal-center {
+  display: flex;
+  justify-content: center;
+}
+
+.center {
+  @extend .vertical-center;
+  @extend .horizontal-center;
+}
+
+.micro-project-list {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+  .micro-body {
+    flex-wrap: wrap;
+    align-content: baseline;
+  }
+}
+
+.micro-project-content {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.micro-field-layout {
+  display: flex;
+  padding: $small-padding;
+  flex: 1 1;
+  overflow: auto;
+}
+
+.micro-page-edit {
+  display: flex;
+  flex: 1;
+}
+
+.micro-page-content-layout {
+  display: flex;
+  flex: 1;
+  .ant-page-header-content {
+    padding-top: 0;
+  }
+}
+
+.micro-page-content {
+  display: flex;
+  flex: 1;
+}
+
+.micro-page-list-layout {
+  padding: $small-padding $small-padding * 2 $small-padding $small-padding;
+  border-top: 1px solid $border-color;
+  flex: 0 0 350px;
+  display: flex;
+}
+
+.micro-page-list {
+  flex: 1;
+  width: 0;
+  display: flex;
+  overflow-x: auto;
+}
+
+.micro-body {
+  padding: $small-padding;
+  display: flex;
+  overflow: auto;
+}
+
+.micro-empty-list {
+  flex: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.micro-loading {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.micro-notfound {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.select-template-select-area {
+  .ant-modal-body {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    max-height: ($padding * 2 + $small-padding * 2 + $card-width * 1.25) * 2;
+    @extend .scroll;
+  }
+}
+
+.micro-field-list {
+  flex: 1 1 auto;
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.micro-field {
+  flex: 0 0 auto;
+  border: 1px solid $border-color;
+  height: min-content;
+  padding: $small-padding;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: $tiny-padding;
+  transition: all 0.2s;
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  & > div {
+    display: flex;
+  }
+  .micro-field-badge {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & > * {
+      $width: 48px;
+      width: $width;
+      height: $width;
+    }
+  }
+  &:hover {
+    box-shadow: $shadow;
+  }
+  &.micro-field-primary {
+    box-shadow: $focus-shadow;
+    position: relative;
+    overflow: hidden;
+    &::after {
+      padding: 0 $padding;
+      content: '';
+      display: block;
+      height: 6px;
+      position: absolute;
+      right: -20px;
+      top: 8px;
+      background-color: $red-5;
+      transform: rotate(45deg);
+    }
+    &:hover {
+      box-shadow: $shadow;
+    }
+  }
+}

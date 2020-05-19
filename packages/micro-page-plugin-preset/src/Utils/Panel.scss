@@ -1,0 +1,59 @@
+@import '~micro-page-react/styles/styles.scss';
+
+$transtion-time: 0.4s;
+
+.micro-com-panel {
+  z-index: 99;
+  box-shadow: $shadow;
+  width: 360px;
+  transition: all $transtion-time;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &.micro-com-panel-hide {
+    opacity: 0;
+    width: 0px;
+    .panel-hide-btn {
+      display: none;
+    }
+  }
+  .panel-title {
+    font-size: 18px;
+    padding: $tiny-padding $small-padding;
+    text-align: center;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+  .panel-subtitle {
+    font-size: 14px;
+    padding: 0 $small-padding;
+    text-align: center;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+  .panel-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    display: flex;
+  }
+}
+
+.panel-hide-btn {
+  animation: panel-hide-btn-opt $transtion-time forwards;
+}
+
+@keyframes panel-hide-btn-opt {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+    position: absolute;
+  }
+  100% {
+    opacity: 1;
+    position: absolute;
+  }
+}

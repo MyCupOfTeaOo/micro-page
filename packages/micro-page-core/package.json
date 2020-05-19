@@ -1,0 +1,33 @@
+{
+  "name": "micro-page-core",
+  "version": "0.0.2",
+  "description": "core",
+  "main": "./es/index.js",
+  "module": "./es/index.js",
+  "scripts": {
+    "build": "father-build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/MyCupOfTeaOo/micro-page.git"
+  },
+  "keywords": [
+    "page",
+    "configurable"
+  ],
+  "author": "tea",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MyCupOfTeaOo/micro-page/issues"
+  },
+  "homepage": "https://github.com/MyCupOfTeaOo/micro-page#readme",
+  "files": [
+    "dist",
+    "es"
+  ],
+  "dependencies": {
+    "async-validator": "^3.2.4",
+    "axios": "^0.19.2"
+  },
+  "gitHead": "a53b62eb0be71668dc7cf0d47a3266dbb7cc950b"
+}

@@ -1,0 +1,145 @@
+@import '../styles.scss';
+
+.list-datagrid {
+  flex: auto;
+  display: flex;
+  overflow: auto;
+  .datagrid-sidebar {
+    display: flex;
+    .datagrid-sidebar-content {
+      width: 250px;
+      flex: 0 0 250px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid $border-color;
+      transition: all 0.4s;
+      .ant-input-affix-wrapper {
+        border-left: none;
+        border-right: none;
+      }
+      .sidebar-title {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 0 $small-padding;
+        height: 57px;
+        line-height: 57px;
+        background-color: rgba(25, 31, 37, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .sidebar-title-extra {
+          transition: all 0.2s;
+          cursor: pointer;
+          &:hover {
+            color: $primary-5;
+          }
+        }
+      }
+      .ant-alert {
+        height: 48px;
+        display: flex;
+        align-items: center;
+        .ant-alert-icon {
+          position: static;
+          margin-left: -$small-padding;
+          margin-right: $small-padding;
+        }
+      }
+      & > section {
+        padding: $small-padding;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        .ant-checkbox-wrapper {
+          margin: 0;
+          line-height: 28px;
+        }
+      }
+      &.datagrid-sidebar-content-hide {
+        opacity: 0;
+        width: 0;
+        flex: 0 0 0;
+      }
+    }
+    .datagrid-sidebar-toolbar {
+      $width: 30px;
+      width: $width;
+      flex: 0 0 auto;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid $border-color;
+      padding-top: 56px;
+      & > span {
+        flex: 0 0 auto;
+        writing-mode: vertical-lr;
+        word-spacing: normal;
+        line-height: $width;
+        padding: $small-padding 0;
+        cursor: pointer;
+        transition: all 0.2s;
+        user-select: none;
+        &:hover {
+          color: $primary-5;
+        }
+      }
+      .anticon {
+        vertical-align: 0;
+        margin-bottom: 4px;
+      }
+    }
+  }
+}
+
+.operationCol {
+  color: $warning;
+}
+
+.vitual-operate-btn-group {
+  position: absolute;
+  right: 0;
+  & > span {
+    cursor: pointer;
+  }
+}
+
+.vitual-operate {
+  position: relative;
+  padding: $tiny-padding;
+  display: flex;
+  align-items: center;
+  padding-right: 64px;
+  .primary {
+    margin-right: $tiny-padding;
+  }
+}
+.vitual-operate-draghandle {
+  margin-right: $tiny-padding;
+  cursor: move;
+}
+.list-btn-group {
+  & > *:nth-child(n) {
+    &::before {
+      content: '[';
+      display: inline-block;
+      color: #262626;
+      margin: 0 2px;
+    }
+    &::after {
+      content: ']';
+      display: inline-block;
+      color: #262626;
+      margin: 0 2px;
+    }
+  }
+}
+
+.virtual-operate-prod {
+  cursor: pointer;
+}
+.codemirror-h-100 {
+  .CodeMirror {
+    height: 100px;
+  }
+}

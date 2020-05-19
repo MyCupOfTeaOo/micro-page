@@ -1,0 +1,137 @@
+@import '~micro-page-react/styles/styles.scss';
+
+.micro-plugin-baseform-layout {
+  flex: auto;
+  display: flex;
+  overflow: auto;
+  flex-direction: row;
+  .panel-form-label {
+    font-size: 18px;
+  }
+
+  .panel-form-layout {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    .ant-select {
+      width: 100%;
+    }
+  }
+  .panel-form {
+    padding: 0 $small-padding;
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+  }
+}
+.micro-plugin-baseform-content {
+  flex: auto;
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+  .ant-card {
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+    overflow: auto;
+    .ant-card-body {
+      flex: auto;
+      overflow: auto;
+    }
+  }
+  .tea-footer-toolbar-layout {
+    flex: 0 0 auto;
+  }
+}
+
+.micro-plugin-baseform-extra {
+  display: flex;
+  padding: $small-padding;
+  justify-content: flex-end;
+}
+.tea-footer-toolbar {
+  z-index: 9;
+}
+
+.micro-plugin-baseform-add {
+  margin-bottom: $small-padding;
+}
+
+.micro-plugin-baseform-mask {
+  position: relative;
+  &:hover {
+    .micro-plugin-baseform-mask-btn {
+      opacity: 1;
+    }
+  }
+}
+.micro-plugin-baseform-mask-btn {
+  transition: all 0.4s;
+  position: absolute;
+  background-color: rgba($color: #000000, $alpha: 0.2);
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.micro-item-draghandle {
+  width: 32px;
+  height: 32px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: $black-3 1px solid;
+  &:hover {
+    color: $primary-5;
+  }
+}
+
+.footbar-btns-div {
+  z-index: 99;
+  display: flex;
+}
+
+$toolbar-height: 56px;
+$component-background: #fff;
+
+.baseform-footer-toolbar {
+  z-index: 10;
+  width: 100%;
+  height: $toolbar-height;
+  padding: 0 24px;
+  background: $component-background;
+  border-top: 1px solid $border-color;
+  box-shadow: $shadow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.baseform-baseconfig {
+  flex: 0 0 auto !important;
+}
+
+.baseform-form-edit-layout {
+  .ant-card-body {
+    position: relative;
+    padding-top: $big-padding;
+  }
+  .baseform-layout-radio {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+
+.baseform-footer-toolbar-prod {
+  button + button {
+    margin-left: $small-padding;
+  }
+}

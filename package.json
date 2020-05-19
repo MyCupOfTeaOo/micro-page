@@ -1,0 +1,52 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "build": "father build",
+    "prepublishOnly": "father build",
+    "postpublish": "rimraf ./packages/*/*tgz",
+    "lint:ts": "tslint \"packages/**/*.ts\" \"packages/**/*.tsx\"",
+    "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./packages",
+    "lint-staged": "lint-staged",
+    "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx ./packages",
+    "prettier": "prettier-eslint --write 'packages/**/*'"
+  },
+  "gitHooks": {
+    "pre-commit": "npm run lint-staged"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,tsx,ts,less,md,json}": [
+      "git add"
+    ],
+    "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.10.0",
+    "@typescript-eslint/parser": "^2.10.0",
+    "@typescript-eslint/typescript-estree": "^2.10.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-typescript": "^4.0.1",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-formatter-pretty": "^3.0.1",
+    "eslint-plugin-flowtype": "^4.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.19.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.1.2",
+    "eslint-plugin-unicorn": "^12.1.0",
+    "lerna": "^3.21.0",
+    "lint-staged": "^9.4.2",
+    "prettier": "^1.19.1",
+    "prettier-eslint": "^9.0.0",
+    "prettier-eslint-cli": "^5.0.0",
+    "rimraf": "^3.0.2",
+    "tslint": "^5.20.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-react": "^4.1.0",
+    "typescript": "^3.9.2",
+    "yorkie": "^2.0.0"
+  }
+}

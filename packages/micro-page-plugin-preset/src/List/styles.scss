@@ -1,0 +1,95 @@
+@import '~micro-page-react/styles/styles.scss';
+
+.micro-plugin-list-layout {
+  flex: auto;
+  display: flex;
+  overflow: auto;
+  flex-direction: row;
+  .tea-fold-card {
+    z-index: 2;
+  }
+  .panel-form-label {
+    font-size: 18px;
+  }
+
+  .panel-form-layout {
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    .ant-select {
+      width: 100%;
+    }
+  }
+  .panel-form {
+    padding: 0 $small-padding;
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+  }
+}
+
+.micro-plugin-list-content {
+  flex: auto;
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+}
+
+.micro-plugin-list-mask {
+  position: relative;
+  &:hover {
+    .micro-plugin-list-mask-btn {
+      opacity: 1;
+    }
+  }
+}
+.micro-plugin-list-mask-btn {
+  transition: all 0.4s;
+  position: absolute;
+  background-color: rgba($color: #000000, $alpha: 0.2);
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.micro-plugin-list-extra {
+  display: flex;
+  padding: $small-padding;
+  justify-content: flex-end;
+}
+
+.micro-plugin-list-add {
+  margin-bottom: $small-padding;
+}
+
+.ant-picker {
+  width: 100%;
+}
+
+.micro-item-draghandle {
+  width: 32px;
+  height: 32px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: $black-3 1px solid;
+  &:hover {
+    color: $primary-5;
+  }
+}
+
+.search-btn-layout {
+  display: flex;
+}
+
+.micro-plugin-list-search {
+  .cardContent {
+    padding-bottom: 0;
+  }
+}
