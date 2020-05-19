@@ -53,7 +53,9 @@
     "react-sortable-hoc": "^1.11.0",
     "react-spring": "^8.0.27",
     "tea-eval": "0.0.6",
-    "teaness": "^4.0.11"
+    "teaness": "^4.0.11",
+    "@types/react-syntax-highlighter": "^11.0.4",
+    "react-syntax-highlighter": "^12.2.1"
   },
   "gitHead": "a53b62eb0be71668dc7cf0d47a3266dbb7cc950b"
 }
