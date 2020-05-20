@@ -34,7 +34,7 @@ export interface Entity {
   /**
    * 实体描述
    */
-  desc: string;
+  desc?: string;
   /**
    * 存储最基本的信息,该结构最重要的基础
    * @summary 字段
