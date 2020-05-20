@@ -1,7 +1,7 @@
 import * as H from 'history';
 import MicroPageCore from 'micro-page-core';
 import { FormStore } from 'teaness/es/Form/store';
-import { Project, Page } from 'micro-page-core/es/typings';
+import { Entity, Page } from 'micro-page-core/es/typings';
 import { Dispatch, SetStateAction } from 'react';
 import { FormItemConfig } from './Widget/FormItem';
 import { FormButtonConfig } from './Widget/FormButton';
@@ -17,7 +17,7 @@ export interface Source {
 export interface PageRenderThis {
   core: MicroPageCore;
   store: FormStore<any>;
-  project: Project & {
+  entity: Entity & {
     pages: Omit<Page, 'source'>[];
   };
   data?: any;

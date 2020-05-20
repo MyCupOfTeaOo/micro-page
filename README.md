@@ -56,30 +56,30 @@ const Workbench : React.FC<any> =  () => {
 > 如果在运行配置好的页面,如下
 
 ```ts
-// 按项目嵌入
-const Project: React.FC<any> = () => {
-  return <MicroPageReact.Project core={core} id="项目 id" />;
+// 按实体嵌入
+const Entity: React.FC<any> = () => {
+  return <MicroPageReact.Entity core={core} id="实体 id" />;
 };
 // 按页面嵌入
 const Page: React.FC<any> = () => {
-  return <MicroPageReact.Page core={core} id="页面 id" projectId="项目 id" />;
+  return <MicroPageReact.Page core={core} id="页面 id" entityId="实体 id" />;
 };
 ```
 
 ## 页面操作流程
 
-1. 创建一个项目
-   ![](./public/create-project.png)
-2. 针对项目设置字段
+1. 创建一个实体
+   ![](./public/create-entity.png)
+2. 针对实体设置字段
    ![](./public/create-field.png)
    ![](./public/create-field2.png)
 3. 按模版创建页面
    ![](./public/select-templete.png)
    ![](./public/create-page.png)
-4. 配置项目下的页面
+4. 配置实体下的页面
    ![](./public/setting-page.png)
-5. 如果是按项目嵌入还需要设置路由处理(暂未实现)
-6. 在嵌入处运行使用配置好的项目/页面(开发人员提前做好嵌入处理)
+5. 如果是按实体嵌入还需要设置路由处理(暂未实现)
+6. 在嵌入处运行使用配置好的实体/页面(开发人员提前做好嵌入处理)
 
 ## todo
 
@@ -87,7 +87,7 @@ const Page: React.FC<any> = () => {
   - [x] 预置插件
   - [x] 预览
 - [x] 嵌入使用
-  - [ ] 项目嵌入
+  - [ ] 实体嵌入
   - [x] 页面嵌入
 
 # micro-page-core
@@ -96,7 +96,7 @@ const Page: React.FC<any> = () => {
 
 # micro-page-react
 
-根据`core`渲染出 react 框架下的 工作台、项目、页面
+根据`core`渲染出 react 框架下的 工作台、实体、页面
 
 # micro-page-plugin-preset
 
@@ -160,15 +160,15 @@ const Page: React.FC<any> = () => {
 
 # FAQ
 
-## 什么是按项目嵌入
+## 什么是按实体嵌入
 
-`按项目嵌入`就是把整个项目所有页面一起嵌入到你的具体业务中的某处
-项目嵌入根据路由配置处理好路由加载
-`按项目嵌入`只需要在一处嵌入就可以使用该项目下的所有页面交互
+`按实体嵌入`就是把整个实体所有页面一起嵌入到你的具体业务中的某处
+实体嵌入根据路由配置处理好路由加载
+`按实体嵌入`只需要在一处嵌入就可以使用该实体下的所有页面交互
 
 ## 什么是按页面嵌入
 
-`按页面嵌入`可以把某个项目下的某个页面嵌入到你的具体业务中的某处
+`按页面嵌入`可以把某个实体下的某个页面嵌入到你的具体业务中的某处
 具体的路由是由你的具体业务自己定义的
 
 ## 接口加上下文参数如何处理呢

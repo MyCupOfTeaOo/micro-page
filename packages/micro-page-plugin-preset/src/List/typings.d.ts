@@ -1,7 +1,7 @@
 import * as H from 'history';
 import { DataGridRef } from 'teaness/es/DataGrid/typings';
 import { FormStore } from 'teaness/es/Form/store';
-import { Project, Page } from 'micro-page-core/es/typings';
+import { Entity, Page } from 'micro-page-core/es/typings';
 import MicroPageCore from 'micro-page-core';
 import { QueryButtonConfig } from './Widget/QueryButton';
 import { QueryItemConfig } from './Widget/QueryItem';
@@ -19,7 +19,7 @@ export interface PageRenderThis {
   setQueryData: (data: Partial<any>) => void;
   queryDataRef: import('react').MutableRefObject<Partial<any>>;
   store: FormStore<any>;
-  project: Project & {
+  entity: Entity & {
     pages: Omit<Page, 'source'>[];
   };
   page: Page<Source>;

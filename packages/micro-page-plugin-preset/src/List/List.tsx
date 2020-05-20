@@ -25,10 +25,10 @@ import arrayMove from 'array-move';
 import { PagePlugin } from 'micro-page-core/es/Plugin';
 import { Field } from 'micro-page-core/es/typings';
 import {
-  useProjectStore,
+  useEntityStore,
   usePage,
   useModal,
-  useProject,
+  useEntity,
   useCore,
 } from 'micro-page-react/es/hooks';
 import { Button, Modal, message, notification } from 'antd';
@@ -111,12 +111,12 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
 
   workBenchRender: React.FC<WorkBenchRenderProps> = () => {
     const { setVisible: setNewVisible, ...modalProps } = useModal();
-    const projectStore = useProjectStore();
+    const entityStore = useEntityStore();
     const history = useHistory();
     const newFieldCode = useRef<string>();
     const { source } = usePage<Source>();
     const store = useStore(
-      projectStore.fields.reduce<FormConfigs<{ [key: string]: any }>>(
+      entityStore.fields.reduce<FormConfigs<{ [key: string]: any }>>(
         (config, field) => {
           config[field.code] = {};
           return config;
@@ -148,13 +148,13 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
     );
     const fieldMap = useMemo(
       () =>
-        projectStore.fields.reduce<{
+        entityStore.fields.reduce<{
           [key: string]: Field;
         }>((map, field) => {
           map[field.code] = field;
           return map;
         }, {}) || {},
-      [projectStore.fields],
+      [entityStore.fields],
     );
     const onSortItemEnd = useCallback(
       ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
@@ -334,9 +334,7 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
                     );
                   })}
                 <Decision
-                  actual={
-                    projectStore.fields.length !== source.queryItem.length
-                  }
+                  actual={entityStore.fields.length !== source.queryItem.length}
                 >
                   <Decision.Case expect>
                     <Col span={24}>
@@ -524,7 +522,7 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
               onChange={v => {
                 newFieldCode.current = v;
               }}
-              options={projectStore.fields
+              options={entityStore.fields
                 .filter(field => !queryItemMap[field.code])
                 .map(field => ({
                   label: `${field.name}(${field.code})`,
@@ -538,19 +536,19 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
   };
 
   pageRender: React.FC<PageRender> = () => {
-    const project = useProject();
+    const entity = useEntity();
     const core = useCore();
     const page = usePage<Source>();
     const { source } = page;
     const fieldMap = useMemo(
       () =>
-        project.fields.reduce<{
+        entity.fields.reduce<{
           [key: string]: Field;
         }>((map, field) => {
           map[field.code] = field;
           return map;
         }, {}) || {},
-      [project],
+      [entity],
     );
     const history = useHistory();
     const location = useLocation() as any;
@@ -584,7 +582,7 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
       gridRef,
       setQueryData,
       queryDataRef,
-      project,
+      entity,
       store,
       page,
       history,

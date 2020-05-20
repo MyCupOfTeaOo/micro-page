@@ -41,8 +41,8 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import {
   usePage,
   useModal,
-  useProjectStore,
-  useProject,
+  useEntityStore,
+  useEntity,
   useCore,
   useQuery,
 } from 'micro-page-react/es/hooks';
@@ -126,17 +126,17 @@ export default class BaseForm extends PagePlugin<
   workBenchRender: React.FC<WorkBenchRenderProps> = () => {
     const history = useHistory();
     const [loading, setLoading] = useState(false);
-    const projectStore = useProjectStore();
+    const entityStore = useEntityStore();
     const { source } = usePage<Source>();
     const fieldMap = useMemo(
       () =>
-        projectStore.fields.reduce<{
+        entityStore.fields.reduce<{
           [key: string]: Field;
         }>((map, field) => {
           map[field.code] = field;
           return map;
         }, {}) || {},
-      [projectStore.fields],
+      [entityStore.fields],
     );
     const setTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = e.target;
@@ -173,7 +173,7 @@ export default class BaseForm extends PagePlugin<
     );
 
     const store = useStore(
-      projectStore.fields.reduce<FormConfigs<{ [key: string]: any }>>(
+      entityStore.fields.reduce<FormConfigs<{ [key: string]: any }>>(
         (config, field) => {
           config[field.code] = {};
           return config;
@@ -440,7 +440,7 @@ export default class BaseForm extends PagePlugin<
                   })}
               </SortableForm>
               <Decision
-                actual={projectStore.fields.length !== source.formItem.length}
+                actual={entityStore.fields.length !== source.formItem.length}
               >
                 <Decision.Case expect>
                   <Col span={24}>
@@ -613,7 +613,7 @@ export default class BaseForm extends PagePlugin<
               onChange={v => {
                 newFieldCode.current = v;
               }}
-              options={projectStore.fields
+              options={entityStore.fields
                 .filter(field => !queryItemMap[field.code])
                 .map(field => ({
                   label: `${field.name}(${field.code})`,
@@ -627,20 +627,20 @@ export default class BaseForm extends PagePlugin<
   };
 
   pageRender: React.FC<PageRender> = () => {
-    const project = useProject();
+    const entity = useEntity();
     const core = useCore();
     const page = usePage<Source>();
     const query = useQuery();
     const { source } = page;
     const fieldMap = useMemo(
       () =>
-        project.fields.reduce<{
+        entity.fields.reduce<{
           [key: string]: Field;
         }>((map, field) => {
           map[field.code] = field;
           return map;
         }, {}) || {},
-      [project],
+      [entity],
     );
     const history = useHistory();
     const params = useParams();
@@ -670,7 +670,7 @@ export default class BaseForm extends PagePlugin<
         setLoading,
         query,
         params,
-        project,
+        entity,
         store,
         page,
         history,
@@ -678,7 +678,7 @@ export default class BaseForm extends PagePlugin<
         location: history.location,
         core,
       }),
-      [query, params, project, store, page, core, data],
+      [query, params, entity, store, page, core, data],
     );
 
     useEffect(() => {

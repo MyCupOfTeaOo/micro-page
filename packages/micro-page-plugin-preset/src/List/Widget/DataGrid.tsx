@@ -36,10 +36,10 @@ import {
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
 import {
-  useProjectStore,
+  useEntityStore,
   usePage,
   useLocalStorage,
-  useProject,
+  useEntity,
 } from 'micro-page-react/es/hooks';
 import './dataGrid.scss';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
@@ -129,7 +129,7 @@ const DataGrid: React.FC<DataGridProps> = props => {
 };
 
 const DataGridConfig: React.FC<DataGridProps> = () => {
-  const projectStore = useProjectStore();
+  const entityStore = useEntityStore();
   const { source } = usePage<Source>();
   const { columnDefs } = source.grid;
   const pinned = useRef(false);
@@ -141,7 +141,7 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
   const [curVistualOperate, setCurVistualOperate] = useState<OperationConfig>();
   const { gridRef, gridProps } = useDataGrid();
   const listPluginContext = useContext(ListPluginContext);
-  const fieldMap = projectStore.fields.reduce<{
+  const fieldMap = entityStore.fields.reduce<{
     [key: string]: Field;
   }>(
     (map, field) => {
@@ -171,7 +171,7 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
   }, []);
   const [search, setSearch] = useState<string>();
   const colSideBar = useMemo(() => {
-    return projectStore.fields
+    return entityStore.fields
       .concat([virtualField])
       .filter(
         field =>
@@ -207,7 +207,7 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
           {field.name}
         </Checkbox>
       ));
-  }, [projectStore.fields, search, columnDefs.length, columnDefs]);
+  }, [entityStore.fields, search, columnDefs.length, columnDefs]);
   const formatColumnDefs = useMemo<ColumnDefs>(() => {
     return columnDefs.map(col => {
       if (col.field === virtualField.code) {
@@ -541,8 +541,8 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
 
 const DataGridProd: React.FC<DataGridProps> = ({ gridProps }) => {
   const { source } = usePage<Source>();
-  const project = useProject();
-  const fieldMap = project.fields.reduce<{
+  const entity = useEntity();
+  const fieldMap = entity.fields.reduce<{
     [key: string]: Field;
   }>(
     (map, field) => {
