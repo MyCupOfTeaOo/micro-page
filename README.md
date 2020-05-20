@@ -170,3 +170,11 @@ const Page: React.FC<any> = () => {
 
 `按页面嵌入`可以把某个项目下的某个页面嵌入到你的具体业务中的某处
 具体的路由是由你的具体业务自己定义的
+
+## 接口加上下文参数如何处理呢
+
+```ts
+import { ServiceContext } from 'micro-page-react';
+```
+
+利用 react context `ServiceContext` 注入上下文,同时 sevice 保证不是 bind this function,ServiceContext 会替换 server function 的 this

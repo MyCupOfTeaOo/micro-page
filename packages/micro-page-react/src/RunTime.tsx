@@ -1,7 +1,12 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useContext } from 'react';
 import MicroPageCore from 'micro-page-core';
 import { notification } from 'antd';
-import { RunTimeProjectContext, PageContext, RenderContext } from './context';
+import {
+  RunTimeProjectContext,
+  PageContext,
+  RenderContext,
+  ServiceContext,
+} from './context';
 import { useRequest } from './hooks';
 import { Loading, NotFound } from './Workbench';
 
@@ -24,8 +29,9 @@ export const PageRender: React.FC<PageRenderProps> = ({
   projectId,
   basePath = '',
 }) => {
+  const serviceContext = useContext(ServiceContext);
   const { data: project, loading = true } = useRequest(
-    core.service.getProject,
+    core.service.getProject.bind(serviceContext),
     {
       params: [projectId],
       onError(err) {
@@ -39,7 +45,7 @@ export const PageRender: React.FC<PageRenderProps> = ({
     },
   );
   const { data: page, loading: loadingPage = true, run } = useRequest(
-    core.service.getPage,
+    core.service.getPage.bind(serviceContext),
   );
   useEffect(() => {
     run(projectId, pageId);

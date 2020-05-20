@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import MicroPageCore from 'micro-page-core';
+import MicroPageCore, { ServiceThis } from 'micro-page-core';
 import { Page, Template, Project } from 'micro-page-core/es/typings';
 import { ProjectStore } from './store';
 
@@ -22,3 +22,5 @@ export const RunTimeProjectContext = createContext<
     pages: Omit<Page, 'source'>[];
   }
 >({} as any);
+
+export const ServiceContext = createContext<ServiceThis>({});

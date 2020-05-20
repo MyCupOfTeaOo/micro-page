@@ -66,7 +66,12 @@ import {
   useSearchTemplate,
   useProjectStore,
 } from './hooks';
-import { RenderContext, ProjectContext, PageContext } from './context';
+import {
+  RenderContext,
+  ProjectContext,
+  PageContext,
+  ServiceContext,
+} from './context';
 import { ProjectStore } from './store';
 import { PageRender } from './RunTime';
 
@@ -142,8 +147,10 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
   const core = useCore();
   const history = useHistory();
   const basePath = useBasePath();
+  const serviceContext = useContext(ServiceContext);
+
   const { data: projects, loading: loadingProjects } = useRequest(
-    core.service.getProjects,
+    core.service.getProjects.bind(serviceContext),
     {
       onError(err) {
         notification.error({
@@ -155,21 +162,24 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
       first: true,
     },
   );
-  const { run, loading } = useRequest(core.service.newProject, {
-    onSuccess(res) {
-      setVisible(false);
-      history.push({
-        pathname: `${basePath}/${res.id}`,
-      });
+  const { run, loading } = useRequest(
+    core.service.newProject.bind(serviceContext),
+    {
+      onSuccess(res) {
+        setVisible(false);
+        history.push({
+          pathname: `${basePath}/${res.id}`,
+        });
+      },
+      onError(err) {
+        notification.error({
+          message: '新建项目失败',
+          description: err.message,
+          placement: 'bottomRight',
+        });
+      },
     },
-    onError(err) {
-      notification.error({
-        message: '新建项目失败',
-        description: err.message,
-        placement: 'bottomRight',
-      });
-    },
-  });
+  );
   if (loadingProjects) {
     return <Loading tip="加载项目列表中" />;
   }
@@ -313,18 +323,22 @@ export const ProjectEdit: React.FC<ProjectEditProps> = observer(() => {
     return new ProjectStore({ core, id });
   }, [id]);
   const basePath = useBasePath();
-  const { run, loading = true } = useRequest(core.service.getProject, {
-    onSuccess(res) {
-      store.loadProject(res);
+  const serviceContext = useContext(ServiceContext);
+  const { run, loading = true } = useRequest(
+    core.service.getProject.bind(serviceContext),
+    {
+      onSuccess(res) {
+        store.loadProject(res);
+      },
+      onError(err) {
+        notification.error({
+          message: '加载项目失败',
+          description: err.message,
+          placement: 'bottomRight',
+        });
+      },
     },
-    onError(err) {
-      notification.error({
-        message: '加载项目失败',
-        description: err.message,
-        placement: 'bottomRight',
-      });
-    },
-  });
+  );
   useEffect(() => {
     run(id);
   }, [id]);
@@ -536,18 +550,21 @@ export const ProjectFieldLayout: React.FC<ProjectFieldLayoutProps> = observer(
       store.reset();
       setVisible(true);
     }, []);
-    const { run: setPrimaryKey } = useRequest(core.service.setPrimaryKey, {
-      onError(err) {
-        notification.error({
-          message: '设置字段主键失败',
-          description: err.message,
-          placement: 'bottomRight',
-        });
+    const serviceContext = useContext(ServiceContext);
+    const { run: setPrimaryKey } = useRequest(
+      core.service.setPrimaryKey.bind(serviceContext),
+      {
+        onError(err) {
+          notification.error({
+            message: '设置字段主键失败',
+            description: err.message,
+            placement: 'bottomRight',
+          });
+        },
       },
-    });
-
+    );
     const { run: addField, loading: adding } = useRequest(
-      core.service.addField,
+      core.service.addField.bind(serviceContext),
       {
         onSuccess(_, params) {
           if (!projectStore.fields.length) {
@@ -571,8 +588,9 @@ export const ProjectFieldLayout: React.FC<ProjectFieldLayoutProps> = observer(
         },
       },
     );
+
     const { run: updateField, loading: updating } = useRequest(
-      core.service.updateField,
+      core.service.updateField.bind(serviceContext),
       {
         onSuccess(_, params) {
           const field = projectStore.fields.find(
@@ -680,8 +698,12 @@ export const ProjectFieldLayout: React.FC<ProjectFieldLayoutProps> = observer(
                             </span>
                           ),
                           onOk: () => {
-                            return core.service
-                              .deleteField(projectStore.id, curField.code)
+                            return core.service.deleteField
+                              .call(
+                                serviceContext,
+                                projectStore.id,
+                                curField.code,
+                              )
                               .then(() => {
                                 notification.success({
                                   placement: 'bottomRight',
@@ -827,36 +849,41 @@ export const PageList: React.FC<PageListProps> = observer(() => {
   }, []);
   const basePath = useBasePath();
   const history = useHistory();
-  const { run: addPage, loading } = useRequest(core.service.addPage, {
-    onError: err => {
-      notification.error({
-        message: '新增页面失败',
-        description: err.message,
-        placement: 'bottomRight',
-      });
+  const serviceContext = useContext(ServiceContext);
+
+  const { run: addPage, loading } = useRequest(
+    core.service.addPage.bind(serviceContext),
+    {
+      onError: err => {
+        notification.error({
+          message: '新增页面失败',
+          description: err.message,
+          placement: 'bottomRight',
+        });
+      },
+      onSuccess: (data, params) => {
+        setVisible(false);
+        projectStore.addPage(data);
+        notification.success({
+          placement: 'bottomRight',
+          message: '新增页面成功',
+          description: (
+            <span>
+              页面
+              <a
+                onClick={() =>
+                  history.push(`${basePath}/${params[0]}/${data.id}`)
+                }
+              >
+                {params[1].title}
+              </a>
+              已添加
+            </span>
+          ),
+        });
+      },
     },
-    onSuccess: (data, params) => {
-      setVisible(false);
-      projectStore.addPage(data);
-      notification.success({
-        placement: 'bottomRight',
-        message: '新增页面成功',
-        description: (
-          <span>
-            页面
-            <a
-              onClick={() =>
-                history.push(`${basePath}/${params[0]}/${data.id}`)
-              }
-            >
-              {params[1].title}
-            </a>
-            已添加
-          </span>
-        ),
-      });
-    },
-  });
+  );
   return (
     <div className="micro-page-list-layout">
       <Decision actual={!projectStore.pages?.length}>
@@ -946,8 +973,10 @@ export const ProjectEditHeader: React.FC<ProjectEditHeaderProps> = observer(
     const core = useCore();
     const basePath = useBasePath();
     const [edited, setEdited] = useState(false);
+    const serviceContext = useContext(ServiceContext);
+
     const { run: patchProject, loading } = useRequest(
-      core.service.patchProject,
+      core.service.patchProject.bind(serviceContext),
       {
         onError(err) {
           notification.error({
@@ -1056,8 +1085,8 @@ export const ProjectEditHeader: React.FC<ProjectEditHeaderProps> = observer(
                         message.error('输入项目名称不一致');
                         return Promise.reject();
                       }
-                      return core.service
-                        .deleteProject(projectStore.id)
+                      return core.service.deleteProject
+                        .call(serviceContext, projectStore.id)
                         .then(() => {
                           notification.success({
                             placement: 'bottomRight',
@@ -1149,8 +1178,10 @@ const PageEdit: React.FC<PageEditProps> = () => {
   const history = useHistory();
   const projectStore = useProjectStore();
   const { id } = useParams<{ id: string }>();
+  const serviceContext = useContext(ServiceContext);
+
   const { data: page, setData: setPage, loading = true } = useRequest(
-    core.service.getPage,
+    core.service.getPage.bind(serviceContext),
     {
       params: [projectStore.id, id],
       first: true,
@@ -1166,8 +1197,8 @@ const PageEdit: React.FC<PageEditProps> = () => {
           onFinish?(): void;
         },
       ) => {
-        core.service
-          .updatePage(...args)
+        core.service.updatePage
+          .call(serviceContext, ...args)
           .then(() => {
             if (options?.onSuccess) {
               options?.onSuccess();
