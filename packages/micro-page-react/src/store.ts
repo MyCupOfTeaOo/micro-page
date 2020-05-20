@@ -3,7 +3,7 @@ import MicroPageCore from 'micro-page-core';
 import { Field, Page, Template } from 'micro-page-core/es/typings';
 import { GetResponseType } from 'micro-page-core/es/utils';
 
-export class ProjectStore {
+export class EntityStore {
   private _core: MicroPageCore;
 
   constructor({ core, id }: { core: MicroPageCore; id: string }) {
@@ -32,32 +32,30 @@ export class ProjectStore {
 
   @observable
   public lastResponse?: GetResponseType<
-    ReturnType<MicroPageCore['service']['getProject']>
+    ReturnType<MicroPageCore['service']['getEntity']>
   >;
 
   @action.bound
-  loadProject(
-    project: GetResponseType<
-      ReturnType<MicroPageCore['service']['getProject']>
-    >,
+  loadEntity(
+    entity: GetResponseType<ReturnType<MicroPageCore['service']['getEntity']>>,
   ) {
-    this.lastResponse = project;
-    this.name = project.name;
-    this.desc = project.desc;
-    const primaryIndex = project.fields?.findIndex(field => field.primary);
+    this.lastResponse = entity;
+    this.name = entity.name;
+    this.desc = entity.desc;
+    const primaryIndex = entity.fields?.findIndex(field => field.primary);
     if (primaryIndex !== undefined && primaryIndex > -1) {
       // 加载的时候把主键放在最前面
       this.fields = [
-        project.fields![primaryIndex],
-        ...project.fields!.slice(0, primaryIndex),
-        ...project.fields!.slice(primaryIndex + 1, project.fields!.length),
+        entity.fields![primaryIndex],
+        ...entity.fields!.slice(0, primaryIndex),
+        ...entity.fields!.slice(primaryIndex + 1, entity.fields!.length),
       ];
     } else {
-      this.fields = project.fields || [];
+      this.fields = entity.fields || [];
     }
-    this.route = project.route;
+    this.route = entity.route;
     this.pages =
-      project.pages?.map(page => ({
+      entity.pages?.map(page => ({
         ...page,
         template: this._core.config.templates.find(
           template => page.key === template.key,

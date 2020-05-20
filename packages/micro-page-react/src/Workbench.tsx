@@ -64,15 +64,15 @@ import {
   useBasePath,
   useTemplates,
   useSearchTemplate,
-  useProjectStore,
+  useEntityStore,
 } from './hooks';
 import {
   RenderContext,
-  ProjectContext,
+  EntityContext,
   PageContext,
   ServiceContext,
 } from './context';
-import { ProjectStore } from './store';
+import { EntityStore } from './store';
 import { PageRender } from './RunTime';
 
 export const fieldSvgTable: { [key in FieldType]: any } = {
@@ -101,11 +101,11 @@ const Render: React.FC<RenderProps> = ({ core, basePath = '' }) => {
       <div className="micro-layout">
         <Switch>
           <Route exact path={`${basePath}/`}>
-            <ProjectList />
+            <EntityList />
           </Route>
 
           <Route path={`${basePath}/:id`}>
-            <ProjectEdit />
+            <EntityEdit />
           </Route>
           <Redirect
             to={{
@@ -125,20 +125,20 @@ export const Header: React.FC<HeaderProps> = props => {
   return <div className="micro-header">{props.title}</div>;
 };
 
-export interface ProjectListProps {}
+export interface EntityListProps {}
 
-export interface NewProjectForm {
+export interface NewEntityForm {
   name: string;
   desc?: string;
 }
 
-export const ProjectList: React.FC<ProjectListProps> = () => {
+export const EntityList: React.FC<EntityListProps> = () => {
   const { setVisible, ...modalProps } = useModal();
-  const store = useStore<NewProjectForm>({
+  const store = useStore<NewEntityForm>({
     name: {
       rules: {
         required: true,
-        message: '项目名称不能为空',
+        message: '实体名称不能为空',
       },
     },
     desc: {},
@@ -149,12 +149,12 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
   const basePath = useBasePath();
   const serviceContext = useContext(ServiceContext);
 
-  const { data: projects, loading: loadingProjects } = useRequest(
-    core.service.getProjects.bind(serviceContext),
+  const { data: entitys, loading: loadingEntitys } = useRequest(
+    core.service.getEntitys.bind(serviceContext),
     {
       onError(err) {
         notification.error({
-          message: '查询项目列表失败',
+          message: '查询实体列表失败',
           description: err.message,
           placement: 'bottomRight',
         });
@@ -163,7 +163,7 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
     },
   );
   const { run, loading } = useRequest(
-    core.service.newProject.bind(serviceContext),
+    core.service.newEntity.bind(serviceContext),
     {
       onSuccess(res) {
         setVisible(false);
@@ -173,25 +173,25 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
       },
       onError(err) {
         notification.error({
-          message: '新建项目失败',
+          message: '新建实体失败',
           description: err.message,
           placement: 'bottomRight',
         });
       },
     },
   );
-  if (loadingProjects) {
-    return <Loading tip="加载项目列表中" />;
+  if (loadingEntitys) {
+    return <Loading tip="加载实体列表中" />;
   }
   return (
     <div className="micro-main">
-      <Decision actual={!!projects?.length}>
+      <Decision actual={!!entitys?.length}>
         <Decision.Case expect>
-          <div className="micro-project-list">
+          <div className="micro-entity-list">
             <PageHeader
               className="micro-header"
-              title="全部项目"
-              subTitle="创建与编辑项目"
+              title="全部实体"
+              subTitle="创建与编辑实体"
               extra={
                 <Button
                   type="primary"
@@ -207,21 +207,21 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
               }
             />
             <div className="micro-body">
-              {projects?.map(project => (
+              {entitys?.map(entity => (
                 <div
-                  key={project.id}
+                  key={entity.id}
                   className="micro-card"
                   onClick={() => {
                     history.push({
-                      pathname: `${basePath}/${project.id}`,
+                      pathname: `${basePath}/${entity.id}`,
                     });
                   }}
                 >
                   <img className="cover" alt="封面" src={coverImg} />
                   <div className="content center">
-                    <h4 className="ellipsis">{project.name}</h4>
+                    <h4 className="ellipsis">{entity.name}</h4>
                     <div className="ellipsis desc">
-                      {project.desc || '暂无描述'}
+                      {entity.desc || '暂无描述'}
                     </div>
                   </div>
                 </div>
@@ -239,7 +239,7 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
                 setVisible(true);
               }}
             >
-              新建项目
+              新建实体
               <PlusOutlined />
             </Button>
           </div>
@@ -255,17 +255,17 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
         onOk={() => {
           store.submit(({ values, errs }) => {
             if (!errs) {
-              run(values as NewProjectForm);
+              run(values as NewEntityForm);
             }
           });
         }}
-        title="新建项目"
+        title="新建实体"
       >
         <Form layout={vertical}>
-          <Item id="name" text="项目名">
+          <Item id="name" text="实体名">
             <Input />
           </Item>
-          <Item id="desc" text="项目描述">
+          <Item id="desc" text="实体描述">
             <Input.TextArea
               autoSize={{
                 minRows: 5,
@@ -278,7 +278,7 @@ export const ProjectList: React.FC<ProjectListProps> = () => {
   );
 };
 
-export interface ProjectEditProps {}
+export interface EntityEditProps {}
 
 export interface LoadingProps {
   tip?: string;
@@ -316,23 +316,23 @@ NotFound.defaultProps = {
   title: '加载失败',
 };
 
-export const ProjectEdit: React.FC<ProjectEditProps> = observer(() => {
+export const EntityEdit: React.FC<EntityEditProps> = observer(() => {
   const core = useCore();
   const { id } = useParams<{ id: string }>();
   const store = useMemo(() => {
-    return new ProjectStore({ core, id });
+    return new EntityStore({ core, id });
   }, [id]);
   const basePath = useBasePath();
   const serviceContext = useContext(ServiceContext);
   const { run, loading = true } = useRequest(
-    core.service.getProject.bind(serviceContext),
+    core.service.getEntity.bind(serviceContext),
     {
       onSuccess(res) {
-        store.loadProject(res);
+        store.loadEntity(res);
       },
       onError(err) {
         notification.error({
-          message: '加载项目失败',
+          message: '加载实体失败',
           description: err.message,
           placement: 'bottomRight',
         });
@@ -346,16 +346,16 @@ export const ProjectEdit: React.FC<ProjectEditProps> = observer(() => {
     return <Loading />;
   }
   return (
-    <ProjectContext.Provider
+    <EntityContext.Provider
       value={{
         store,
       }}
     >
-      <div className="micro-main micro-main-project">
+      <div className="micro-main micro-main-entity">
         <Switch>
           <Route path={`${basePath}/${id}`} exact>
-            <ProjectEditHeader />
-            <ProjectContent />
+            <EntityEditHeader />
+            <EntityContent />
           </Route>
           <Route path={`${basePath}/${id}/:id/preview`} exact>
             <Preview />
@@ -365,7 +365,7 @@ export const ProjectEdit: React.FC<ProjectEditProps> = observer(() => {
           </Route>
         </Switch>
       </div>
-    </ProjectContext.Provider>
+    </EntityContext.Provider>
   );
 });
 
@@ -477,24 +477,24 @@ export interface NewPageForm {
   desc?: string;
 }
 
-export interface ProjectContentProps {}
-export const ProjectContent: React.FC<ProjectContentProps> = observer(() => {
-  const projectStore = useProjectStore();
+export interface EntityContentProps {}
+export const EntityContent: React.FC<EntityContentProps> = observer(() => {
+  const entityStore = useEntityStore();
   return (
-    <div className="micro-project-content">
-      <ProjectFieldLayout />
-      <Show actual={!!projectStore.fields.length} expect>
+    <div className="micro-entity-content">
+      <EntityFieldLayout />
+      <Show actual={!!entityStore.fields.length} expect>
         <PageList />
       </Show>
     </div>
   );
 });
 
-export interface ProjectFieldLayoutProps {}
+export interface EntityFieldLayoutProps {}
 
-export const ProjectFieldLayout: React.FC<ProjectFieldLayoutProps> = observer(
+export const EntityFieldLayout: React.FC<EntityFieldLayoutProps> = observer(
   () => {
-    const projectStore = useProjectStore();
+    const entityStore = useEntityStore();
     const core = useCore();
     const [curField, setCurField] = useState<Field>();
     const store = useStore<Field>(
@@ -511,7 +511,7 @@ export const ProjectFieldLayout: React.FC<ProjectFieldLayoutProps> = observer(
                 if (
                   value &&
                   value !== curField?.code &&
-                  projectStore.fields.find(field => field.code === value)
+                  entityStore.fields.find(field => field.code === value)
                 ) {
                   return new Error('该字段已存在,请修改编码');
                 }
@@ -567,14 +567,14 @@ export const ProjectFieldLayout: React.FC<ProjectFieldLayoutProps> = observer(
       core.service.addField.bind(serviceContext),
       {
         onSuccess(_, params) {
-          if (!projectStore.fields.length) {
-            setPrimaryKey(projectStore.id, params[1].code);
-            projectStore.fields.push({
+          if (!entityStore.fields.length) {
+            setPrimaryKey(entityStore.id, params[1].code);
+            entityStore.fields.push({
               ...params[1],
               primary: true,
             });
           } else {
-            projectStore.fields.push(params[1]);
+            entityStore.fields.push(params[1]);
           }
 
           setVisible(false);
@@ -593,7 +593,7 @@ export const ProjectFieldLayout: React.FC<ProjectFieldLayoutProps> = observer(
       core.service.updateField.bind(serviceContext),
       {
         onSuccess(_, params) {
-          const field = projectStore.fields.find(
+          const field = entityStore.fields.find(
             item => item.code === params[1],
           );
           if (field) {
@@ -617,16 +617,16 @@ export const ProjectFieldLayout: React.FC<ProjectFieldLayoutProps> = observer(
       store.submit(({ values, errs }) => {
         if (!errs) {
           if (curField) {
-            updateField(projectStore.id, curField.code, values as Field);
+            updateField(entityStore.id, curField.code, values as Field);
           } else {
-            addField(projectStore.id, values as Field);
+            addField(entityStore.id, values as Field);
           }
         }
       });
     }, [curField]);
     return (
       <div className="micro-field-layout">
-        <Decision actual={!projectStore.fields.length}>
+        <Decision actual={!entityStore.fields.length}>
           <Decision.Case expect>
             <div className="micro-empty-list">
               <Button type="primary" onClick={newField}>
@@ -636,10 +636,10 @@ export const ProjectFieldLayout: React.FC<ProjectFieldLayoutProps> = observer(
           </Decision.Case>
           <Decision.Case expect={false}>
             <Radio.Group
-              value={projectStore.fields.find(field => field.primary)?.code}
+              value={entityStore.fields.find(field => field.primary)?.code}
               onChange={e => {
-                projectStore.setPrimary(e.target.value);
-                setPrimaryKey(projectStore.id, e.target.value);
+                entityStore.setPrimary(e.target.value);
+                setPrimaryKey(entityStore.id, e.target.value);
               }}
               className="micro-field-list"
             >
@@ -655,7 +655,7 @@ export const ProjectFieldLayout: React.FC<ProjectFieldLayoutProps> = observer(
                   新建字段 <PlusOutlined />
                 </span>
               </div>
-              {projectStore.fields.map(field => (
+              {entityStore.fields.map(field => (
                 <FieldRender
                   key={field.code}
                   field={field}
@@ -701,7 +701,7 @@ export const ProjectFieldLayout: React.FC<ProjectFieldLayoutProps> = observer(
                             return core.service.deleteField
                               .call(
                                 serviceContext,
-                                projectStore.id,
+                                entityStore.id,
                                 curField.code,
                               )
                               .then(() => {
@@ -823,7 +823,7 @@ export const FieldRender: React.FC<FieldRenderProps> = ({
 
 export interface PageListProps {}
 export const PageList: React.FC<PageListProps> = observer(() => {
-  const projectStore = useProjectStore();
+  const entityStore = useEntityStore();
   const core = useCore();
   const store = useStore<NewPageForm>({
     title: {
@@ -863,7 +863,7 @@ export const PageList: React.FC<PageListProps> = observer(() => {
       },
       onSuccess: (data, params) => {
         setVisible(false);
-        projectStore.addPage(data);
+        entityStore.addPage(data);
         notification.success({
           placement: 'bottomRight',
           message: '新增页面成功',
@@ -886,7 +886,7 @@ export const PageList: React.FC<PageListProps> = observer(() => {
   );
   return (
     <div className="micro-page-list-layout">
-      <Decision actual={!projectStore.pages?.length}>
+      <Decision actual={!entityStore.pages?.length}>
         <Decision.Case expect>
           <div className="micro-empty-list">
             <Button type="primary" onClick={newPage}>
@@ -902,12 +902,12 @@ export const PageList: React.FC<PageListProps> = observer(() => {
             </div>
           </div>
           <div className="micro-page-list">
-            {projectStore.pages?.map(page => (
+            {entityStore.pages?.map(page => (
               <div
                 key={page.id}
                 className="micro-card"
                 onClick={() => {
-                  history.push(`${basePath}/${projectStore.id}/${page.id}`);
+                  history.push(`${basePath}/${entityStore.id}/${page.id}`);
                 }}
               >
                 <img className="cover" alt="封面" src={page.template?.cover} />
@@ -937,9 +937,9 @@ export const PageList: React.FC<PageListProps> = observer(() => {
             );
             const page = {
               ...values,
-              source: target?.plugin.getDefaultValue(projectStore.fields),
+              source: target?.plugin.getDefaultValue(entityStore.fields),
             };
-            addPage(projectStore.id, page as Omit<Page, 'id'>);
+            addPage(entityStore.id, page as Omit<Page, 'id'>);
           });
         }}
         title="新建页面"
@@ -964,19 +964,19 @@ export const PageList: React.FC<PageListProps> = observer(() => {
   );
 });
 
-export interface ProjectEditHeaderProps {}
+export interface EntityEditHeaderProps {}
 
-export const ProjectEditHeader: React.FC<ProjectEditHeaderProps> = observer(
+export const EntityEditHeader: React.FC<EntityEditHeaderProps> = observer(
   () => {
     const history = useHistory();
-    const projectStore = useProjectStore();
+    const entityStore = useEntityStore();
     const core = useCore();
     const basePath = useBasePath();
     const [edited, setEdited] = useState(false);
     const serviceContext = useContext(ServiceContext);
 
-    const { run: patchProject, loading } = useRequest(
-      core.service.patchProject.bind(serviceContext),
+    const { run: patchEntity, loading } = useRequest(
+      core.service.patchEntity.bind(serviceContext),
       {
         onError(err) {
           notification.error({
@@ -992,16 +992,16 @@ export const ProjectEditHeader: React.FC<ProjectEditHeaderProps> = observer(
     );
 
     const submit = useCallback(() => {
-      if (!projectStore.name) {
-        projectStore.resetName();
-        message.error('项目名称不能为空');
+      if (!entityStore.name) {
+        entityStore.resetName();
+        message.error('实体名称不能为空');
         return;
       }
-      patchProject(projectStore.id, {
-        name: projectStore.name,
-        desc: projectStore.desc,
+      patchEntity(entityStore.id, {
+        name: entityStore.name,
+        desc: entityStore.desc,
       });
-    }, [projectStore]);
+    }, [entityStore]);
     const springRef = useRef(null);
     const transRef = useRef(null);
     const transitions = useTransition(edited, null, {
@@ -1081,20 +1081,20 @@ export const ProjectEditHeader: React.FC<ProjectEditHeaderProps> = observer(
                     },
                     okText: '确认并删除',
                     onOk() {
-                      if (input !== projectStore.name) {
-                        message.error('输入项目名称不一致');
+                      if (input !== entityStore.name) {
+                        message.error('输入实体名称不一致');
                         return Promise.reject();
                       }
-                      return core.service.deleteProject
-                        .call(serviceContext, projectStore.id)
+                      return core.service.deleteEntity
+                        .call(serviceContext, entityStore.id)
                         .then(() => {
                           notification.success({
                             placement: 'bottomRight',
                             message: (
                               <span>
-                                项目
+                                实体
                                 <span className="success">
-                                  {projectStore.name}
+                                  {entityStore.name}
                                 </span>
                                 删除成功
                               </span>
@@ -1105,7 +1105,7 @@ export const ProjectEditHeader: React.FC<ProjectEditHeaderProps> = observer(
                         .catch((err: Error) => {
                           notification.error({
                             placement: 'bottomRight',
-                            message: '删除项目失败',
+                            message: '删除实体失败',
                             description: err.message,
                           });
                           return Promise.reject(err);
@@ -1115,8 +1115,8 @@ export const ProjectEditHeader: React.FC<ProjectEditHeaderProps> = observer(
                       <Space direction="vertical" style={{ width: '100%' }}>
                         <span>
                           确定删除
-                          <span className="danger"> {projectStore.name} </span>
-                          吗, 请确认项目名称
+                          <span className="danger"> {entityStore.name} </span>
+                          吗, 请确认实体名称
                         </span>
                         <Input
                           onChange={e => {
@@ -1139,11 +1139,11 @@ export const ProjectEditHeader: React.FC<ProjectEditHeaderProps> = observer(
             <Decision.Case expect>
               <Input
                 size="small"
-                value={projectStore.name}
-                onChange={e => projectStore.setName(e.target.value)}
+                value={entityStore.name}
+                onChange={e => entityStore.setName(e.target.value)}
               />
             </Decision.Case>
-            <Decision.Case expect={false}>{projectStore.name}</Decision.Case>
+            <Decision.Case expect={false}>{entityStore.name}</Decision.Case>
           </Decision>
         }
       >
@@ -1154,15 +1154,15 @@ export const ProjectEditHeader: React.FC<ProjectEditHeaderProps> = observer(
           <Decision actual={edited}>
             <Decision.Case expect>
               <Input.TextArea
-                value={projectStore.desc}
-                onChange={e => projectStore.setDesc(e.target.value)}
+                value={entityStore.desc}
+                onChange={e => entityStore.setDesc(e.target.value)}
                 autoSize={{
                   minRows: 4,
                 }}
               />
             </Decision.Case>
             <Decision.Case expect={false}>
-              <div className="text-muti-line">{projectStore.desc}</div>
+              <div className="text-muti-line">{entityStore.desc}</div>
             </Decision.Case>
           </Decision>
         </div>
@@ -1176,14 +1176,14 @@ export interface PageEditProps {}
 const PageEdit: React.FC<PageEditProps> = () => {
   const core = useCore();
   const history = useHistory();
-  const projectStore = useProjectStore();
+  const entityStore = useEntityStore();
   const { id } = useParams<{ id: string }>();
   const serviceContext = useContext(ServiceContext);
 
   const { data: page, setData: setPage, loading = true } = useRequest(
     core.service.getPage.bind(serviceContext),
     {
-      params: [projectStore.id, id],
+      params: [entityStore.id, id],
       first: true,
     },
   );
@@ -1250,7 +1250,7 @@ const PageEdit: React.FC<PageEditProps> = () => {
               Object.assign(prevPage, {
                 source: dispatch(prevPage?.source),
               });
-              updatePage([projectStore.id, prevPage], ohterOptions);
+              updatePage([entityStore.id, prevPage], ohterOptions);
             }
             if (refresh && prevPage) {
               return { ...prevPage };
@@ -1330,9 +1330,9 @@ export interface PreviewProps {}
 
 export const Preview: React.FC<PreviewProps> = () => {
   const core = useCore();
-  const projectStore = useProjectStore();
+  const entityStore = useEntityStore();
   const { id } = useParams<{ id: string }>();
-  return <PageRender core={core} projectId={projectStore.id} pageId={id} />;
+  return <PageRender core={core} entityId={entityStore.id} pageId={id} />;
 };
 
 export default Render;

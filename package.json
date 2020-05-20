@@ -4,6 +4,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
     "build": "lerna link && father build",
+    "watch": "father-build build --watch",
     "publish:all": "npm run build && lerna publish",
     "postpublish": "rimraf ./packages/*/*tgz",
     "lint:ts": "tslint \"packages/**/*.ts\" \"packages/**/*.tsx\"",

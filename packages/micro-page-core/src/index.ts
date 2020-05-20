@@ -1,4 +1,4 @@
-import MicroPageCore from './core';
+import MicroPageCore from './Core';
 
 export * from './Plugin';
 export * from './Service';

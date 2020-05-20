@@ -2,15 +2,15 @@ import { RuleItem } from 'async-validator';
 import { AxiosInstance } from 'axios';
 import { PagePlugin } from './Plugin';
 import {
-  NewProject,
-  GetProject,
-  PatchProject,
-  GetProjects,
+  NewEntity,
+  GetEntity,
+  PatchEntity,
+  GetEntitys,
   AddField,
   UpdateField,
   SetPrimaryKey,
   DeleteField,
-  DeleteProject,
+  DeleteEntity,
   AddPage,
   GetPage,
   UpdatePage,
@@ -22,17 +22,17 @@ import {
  * 运行时使用
  * @summary 持久化的数据描述
  */
-export interface Project {
+export interface Entity {
   /**
-   * 项目id
+   * 实体id
    */
   id: string;
   /**
-   * 项目名
+   * 实体名
    */
   name: string;
   /**
-   * 项目描述
+   * 实体描述
    */
   desc: string;
   /**
@@ -69,11 +69,11 @@ export interface Config {
    * 内部接口的实现
    */
   service: {
-    newProject: NewProject;
-    deleteProject: DeleteProject;
-    getProject: GetProject;
-    getProjects: GetProjects;
-    patchProject: PatchProject;
+    newEntity: NewEntity;
+    deleteEntity: DeleteEntity;
+    getEntity: GetEntity;
+    getEntitys: GetEntitys;
+    patchEntity: PatchEntity;
     addField: AddField;
     deleteField: DeleteField;
     updateField: UpdateField;

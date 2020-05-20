@@ -182,7 +182,7 @@ $success: $green-5;
   display: flex;
   flex-direction: column;
 }
-.micro-main-project {
+.micro-main-entity {
   flex-direction: row;
 
   .micro-header {
@@ -293,7 +293,7 @@ $success: $green-5;
   @extend .horizontal-center;
 }
 
-.micro-project-list {
+.micro-entity-list {
   flex: auto;
   display: flex;
   flex-direction: column;
@@ -303,7 +303,7 @@ $success: $green-5;
   }
 }
 
-.micro-project-content {
+.micro-entity-content {
   flex: auto;
   display: flex;
   flex-direction: column;

@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useContext } from 'react';
 import MicroPageCore from 'micro-page-core';
 import { notification } from 'antd';
 import {
-  RunTimeProjectContext,
+  RunTimeEntityContext,
   PageContext,
   RenderContext,
   ServiceContext,
@@ -18,25 +18,25 @@ export interface PageRenderProps {
    */
   pageId: string;
   /**
-   * 项目id
+   * 实体id
    */
-  projectId: string;
+  entityId: string;
 }
 
 export const PageRender: React.FC<PageRenderProps> = ({
   core,
   pageId,
-  projectId,
+  entityId,
   basePath = '',
 }) => {
   const serviceContext = useContext(ServiceContext);
-  const { data: project, loading = true } = useRequest(
-    core.service.getProject.bind(serviceContext),
+  const { data: entity, loading = true } = useRequest(
+    core.service.getEntity.bind(serviceContext),
     {
-      params: [projectId],
+      params: [entityId],
       onError(err) {
         notification.error({
-          message: '渲染业务加载失败',
+          message: '渲染失败,无法加载实体数据',
           description: err.message,
           placement: 'bottomRight',
         });
@@ -48,8 +48,8 @@ export const PageRender: React.FC<PageRenderProps> = ({
     core.service.getPage.bind(serviceContext),
   );
   useEffect(() => {
-    run(projectId, pageId);
-  }, [projectId, pageId]);
+    run(entityId, pageId);
+  }, [entityId, pageId]);
 
   const renderContext = useMemo(() => {
     return {
@@ -69,8 +69,8 @@ export const PageRender: React.FC<PageRenderProps> = ({
     return <Loading />;
   }
 
-  if (!project) {
-    return <NotFound title="找不到项目" />;
+  if (!entity) {
+    return <NotFound title="找不到实体" />;
   }
   if (!pageContext.template) {
     return <NotFound title="找不到模版" />;
@@ -80,24 +80,24 @@ export const PageRender: React.FC<PageRenderProps> = ({
   }
   return (
     <RenderContext.Provider value={renderContext}>
-      <RunTimeProjectContext.Provider value={project}>
+      <RunTimeEntityContext.Provider value={entity}>
         <PageContext.Provider value={pageContext}>
           <pageContext.template.plugin.pageRender />
         </PageContext.Provider>
-      </RunTimeProjectContext.Provider>
+      </RunTimeEntityContext.Provider>
     </RenderContext.Provider>
   );
 };
 
-export interface ProjectRenderProps {
+export interface EntityRenderProps {
   core: MicroPageCore;
   basePath?: string;
   /**
-   * 项目id
+   * 实体id
    */
-  projectId: string;
+  entityId: string;
 }
 
-export const ProjectRender: React.FC<ProjectRenderProps> = () => {
-  return <div>ProjectRenderProps</div>;
+export const EntityRender: React.FC<EntityRenderProps> = () => {
+  return <div>EntityRenderProps</div>;
 };

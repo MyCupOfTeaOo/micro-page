@@ -17,9 +17,9 @@ import { GetResponseType, CancellablePromise } from 'micro-page-core/es/utils';
 import { Page } from 'micro-page-core/es/typings';
 import {
   RenderContext,
-  ProjectContext,
+  EntityContext,
   PageContext,
-  RunTimeProjectContext,
+  RunTimeEntityContext,
 } from './context';
 
 export function useLocalStorage<T = any>(
@@ -239,14 +239,14 @@ export function useTemplate() {
 /*                                compile hooks                               */
 /* -------------------------------------------------------------------------- */
 
-export function useProjectStore() {
-  return useContext(ProjectContext).store;
+export function useEntityStore() {
+  return useContext(EntityContext).store;
 }
 
 /* -------------------------------------------------------------------------- */
 /*                                runtime hooks                               */
 /* -------------------------------------------------------------------------- */
 
-export function useProject() {
-  return useContext(RunTimeProjectContext);
+export function useEntity() {
+  return useContext(RunTimeEntityContext);
 }

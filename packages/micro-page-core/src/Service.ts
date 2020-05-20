@@ -1,4 +1,4 @@
-import { Project, Page, Field } from './typings';
+import { Entity, Page, Field } from './typings';
 import { CancellablePromise } from './utils';
 
 export interface ServiceThis {
@@ -6,9 +6,9 @@ export interface ServiceThis {
 }
 
 /**
- * 新建项目
+ * 新建实体
  */
-export type NewProject = (
+export type NewEntity = (
   this: ServiceThis,
   data: {
     name: string;
@@ -19,38 +19,38 @@ export type NewProject = (
 }>;
 
 /**
- * 删除项目
+ * 删除实体
  */
-export type DeleteProject = (
+export type DeleteEntity = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
 ) => CancellablePromise<void>;
 
 /**
- * 获取指定的项目
+ * 获取指定的实体
  */
-export type GetProject = (
+export type GetEntity = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
 ) => CancellablePromise<
-  Project & {
+  Entity & {
     pages: Omit<Page, 'source'>[];
   }
 >;
 
 /**
- * 获取所有的项目
+ * 获取所有的实体
  */
-export type GetProjects = (
+export type GetEntitys = (
   this: ServiceThis,
-) => CancellablePromise<Pick<Project, 'id' | 'name' | 'desc'>[]>;
+) => CancellablePromise<Pick<Entity, 'id' | 'name' | 'desc'>[]>;
 
 /**
- * 更新项目名称
+ * 更新实体名称
  */
-export type PatchProject = (
+export type PatchEntity = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
   data: {
     name: string;
     desc?: string;
@@ -58,19 +58,19 @@ export type PatchProject = (
 ) => CancellablePromise<void>;
 
 /**
- * 项目新增字段
+ * 实体新增字段
  */
 export type AddField = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
   data: Field,
 ) => CancellablePromise<void>;
 /**
- * 项目修改字段
+ * 实体修改字段
  */
 export type UpdateField = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
   code: string,
   data: Field,
 ) => CancellablePromise<void>;
@@ -80,7 +80,7 @@ export type UpdateField = (
  */
 export type DeleteField = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
   code: string,
 ) => CancellablePromise<void>;
 
@@ -89,7 +89,7 @@ export type DeleteField = (
  */
 export type MoveField = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
   from: number,
   to: number,
 ) => CancellablePromise<void>;
@@ -99,7 +99,7 @@ export type MoveField = (
  */
 export type SetPrimaryKey = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
   code: string,
 ) => CancellablePromise<void>;
 
@@ -108,7 +108,7 @@ export type SetPrimaryKey = (
  */
 export type AddPage = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
   data: Omit<Page, 'id'>,
 ) => CancellablePromise<Page>;
 
@@ -117,7 +117,7 @@ export type AddPage = (
  */
 export type GetPage = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
   pageId: string,
 ) => CancellablePromise<Page>;
 
@@ -126,7 +126,7 @@ export type GetPage = (
  */
 export type UpdatePage = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
   page: Page,
 ) => CancellablePromise<void>;
 
@@ -135,7 +135,7 @@ export type UpdatePage = (
  */
 export type DeletePage = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
   pageId: string,
 ) => CancellablePromise<void>;
 
@@ -144,7 +144,7 @@ export type DeletePage = (
  */
 export type MovePage = (
   this: ServiceThis,
-  projectId: string,
+  entityId: string,
   from: number,
   to: number,
 ) => CancellablePromise<void>;
