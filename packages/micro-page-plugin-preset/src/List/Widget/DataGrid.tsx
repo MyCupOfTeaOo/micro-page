@@ -15,6 +15,7 @@ import {
   useForm,
   vertical,
   Decision,
+  BaseGrid,
 } from 'teaness';
 import classnames from 'classnames';
 import {
@@ -360,7 +361,15 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
             'datagrid-sidebar-content-hide': visibleKey !== 'base',
           })}
         >
-          <div className="sidebar-title">基础设置</div>
+          <div
+            className="sidebar-title"
+            style={{
+              height: (BaseGrid.defaultProps?.headerHeight || 56) + 1,
+              lineHeight: (BaseGrid.defaultProps?.headerHeight || 56) + 1,
+            }}
+          >
+            基础设置
+          </div>
           <section>
             <Form layout={vertical}>
               <Item
