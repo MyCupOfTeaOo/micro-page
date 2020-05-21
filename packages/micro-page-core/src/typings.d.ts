@@ -5,7 +5,7 @@ import {
   NewEntity,
   GetEntity,
   PatchEntity,
-  GetEntitys,
+  GetEntities,
   AddField,
   UpdateField,
   SetPrimaryKey,
@@ -72,7 +72,7 @@ export interface Config {
     newEntity: NewEntity;
     deleteEntity: DeleteEntity;
     getEntity: GetEntity;
-    getEntitys: GetEntitys;
+    getEntities: GetEntities;
     patchEntity: PatchEntity;
     addField: AddField;
     deleteField: DeleteField;

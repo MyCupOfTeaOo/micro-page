@@ -149,8 +149,8 @@ export const EntityList: React.FC<EntityListProps> = () => {
   const basePath = useBasePath();
   const serviceContext = useContext(ServiceContext);
 
-  const { data: entitys, loading: loadingEntitys } = useRequest(
-    core.service.getEntitys.bind(serviceContext),
+  const { data: entities, loading: loadingEntities } = useRequest(
+    core.service.getEntities.bind(serviceContext),
     {
       onError(err) {
         notification.error({
@@ -180,12 +180,12 @@ export const EntityList: React.FC<EntityListProps> = () => {
       },
     },
   );
-  if (loadingEntitys) {
+  if (loadingEntities) {
     return <Loading tip="加载实体列表中" />;
   }
   return (
     <div className="micro-main">
-      <Decision actual={!!entitys?.length}>
+      <Decision actual={!!entities?.length}>
         <Decision.Case expect>
           <div className="micro-entity-list">
             <PageHeader
@@ -207,7 +207,7 @@ export const EntityList: React.FC<EntityListProps> = () => {
               }
             />
             <div className="micro-body">
-              {entitys?.map(entity => (
+              {entities?.map(entity => (
                 <div
                   key={entity.id}
                   className="micro-card"

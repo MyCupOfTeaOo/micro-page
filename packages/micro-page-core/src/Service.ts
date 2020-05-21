@@ -41,7 +41,7 @@ export type GetEntity = (
 /**
  * 获取所有的实体
  */
-export type GetEntitys = (
+export type GetEntities = (
   this: ServiceThis,
 ) => CancellablePromise<Pick<Entity, 'id' | 'name' | 'desc'>[]>;
 
