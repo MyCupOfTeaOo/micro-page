@@ -439,26 +439,26 @@ export default class BaseForm extends PagePlugin<
                       </SortableItem>
                     );
                   })}
+                <Decision
+                  actual={entityStore.fields.length !== source.formItem.length}
+                >
+                  <Decision.Case expect>
+                    <Col span={24}>
+                      <Button
+                        block
+                        type="dashed"
+                        className="micro-plugin-baseform-add"
+                        onClick={() => {
+                          newFieldCode.current = undefined;
+                          setNewVisible(true);
+                        }}
+                      >
+                        添加表单项 <PlusOutlined />
+                      </Button>
+                    </Col>
+                  </Decision.Case>
+                </Decision>
               </SortableForm>
-              <Decision
-                actual={entityStore.fields.length !== source.formItem.length}
-              >
-                <Decision.Case expect>
-                  <Col span={24}>
-                    <Button
-                      block
-                      type="dashed"
-                      className="micro-plugin-baseform-add"
-                      onClick={() => {
-                        newFieldCode.current = undefined;
-                        setNewVisible(true);
-                      }}
-                    >
-                      添加表单项 <PlusOutlined />
-                    </Button>
-                  </Col>
-                </Decision.Case>
-              </Decision>
             </Card>
             <SortableDivContainer
               axis="x"
