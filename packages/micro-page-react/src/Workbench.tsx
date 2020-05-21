@@ -732,6 +732,7 @@ export const EntityFieldLayout: React.FC<EntityFieldLayoutProps> = observer(
                           okText: '删除',
                           okButtonProps: {
                             danger: true,
+                            type: 'primary',
                           },
                           content:
                             '一旦删除后无法还原,对应的页面设置关联项也会清除',
@@ -1073,10 +1074,12 @@ export const EntityEditHeader: React.FC<EntityEditHeaderProps> = observer(
               </Button>
               <Button
                 danger
+                type="primary"
                 onClick={() => {
                   let input: string;
                   Modal.confirm({
                     okButtonProps: {
+                      type: 'primary',
                       danger: true,
                     },
                     okText: '确认并删除',

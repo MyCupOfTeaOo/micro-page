@@ -250,6 +250,7 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
                                 />
                                 <Button
                                   danger
+                                  type="primary"
                                   icon={<DeleteOutlined />}
                                   onClick={() => {
                                     Modal.confirm({
@@ -378,6 +379,7 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
                               />
                               <Button
                                 danger
+                                type="primary"
                                 icon={<DeleteOutlined />}
                                 onClick={() => {
                                   Modal.confirm({

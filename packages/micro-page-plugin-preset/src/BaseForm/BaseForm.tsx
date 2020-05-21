@@ -354,6 +354,7 @@ export default class BaseForm extends PagePlugin<
                                 />
                                 <Button
                                   danger
+                                  type="primary"
                                   icon={<DeleteOutlined />}
                                   onClick={() => {
                                     Modal.confirm({
@@ -480,6 +481,7 @@ export default class BaseForm extends PagePlugin<
                         />
                         <Button
                           danger
+                          type="primary"
                           icon={<DeleteOutlined />}
                           onClick={() => {
                             Modal.confirm({

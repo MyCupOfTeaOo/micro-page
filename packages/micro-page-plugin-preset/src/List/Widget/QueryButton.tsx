@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useCallback } from 'react';
-import { Button, Select, Input } from 'antd';
+import { Button, Select, Input, Switch } from 'antd';
 import { ButtonProps } from 'antd/lib/button';
 import { observer } from 'mobx-react';
 import { useStore, useForm, vertical, Show } from 'teaness';
@@ -11,6 +11,7 @@ export interface QueryButtonConfig {
   func?: string;
   funcProps?: any;
   type?: ButtonProps['type'];
+  danger?: boolean;
   size?: ButtonProps['size'];
 }
 
@@ -37,7 +38,6 @@ const buttonTypeOptions = [
   { value: 'primary', label: '主题' },
   { value: 'ghost', label: '幽灵' },
   { value: 'dashed', label: '虚线' },
-  { value: 'danger', label: '危险' },
   { value: 'link', label: '链接' },
 ];
 
@@ -58,6 +58,9 @@ const QueryButtonConfig: React.FC<QueryButtonProps> = observer(props => {
       },
       type: {
         defaultValue: props.config?.type || 'default',
+      },
+      danger: {
+        defaultValue: props.config?.danger || false,
       },
       size: {
         defaultValue: props.config?.size || 'middle',
@@ -103,6 +106,9 @@ const QueryButtonConfig: React.FC<QueryButtonProps> = observer(props => {
         </Item>
         <Item text="按钮类型" id="type">
           <Select options={buttonTypeOptions} allowClear />
+        </Item>
+        <Item text="危险按钮" id="danger" valueName="checked">
+          <Switch />
         </Item>
         <Item text="按钮大小" id="size">
           <Select options={sizeOptions} allowClear />

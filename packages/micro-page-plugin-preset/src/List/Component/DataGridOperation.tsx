@@ -33,7 +33,7 @@ export const rowFuncOptions = Object.keys(rowFuncMap).map(key => ({
   value: key,
 }));
 
-const buttonTypeOptions = [
+const operateTypeOptions = [
   { value: 'primary', label: '主题' },
   { value: 'danger', label: '危险' },
   { value: 'warning', label: '警告' },
@@ -103,7 +103,7 @@ const OperationConfig: React.FC<OperationProps> = observer(props => {
           <Input />
         </Item>
         <Item text="操作类型" id="type">
-          <Select options={buttonTypeOptions} allowClear />
+          <Select options={operateTypeOptions} allowClear />
         </Item>
         <Item text="调用函数" id="func">
           <Select options={rowFuncOptions} allowClear />
