@@ -497,6 +497,8 @@ export const EntityFieldLayout: React.FC<EntityFieldLayoutProps> = observer(
     const entityStore = useEntityStore();
     const core = useCore();
     const [curField, setCurField] = useState<Field>();
+    const { setVisible, ...drawerProps } = useDrawer();
+
     const store = useStore<Field>(
       {
         code: {
@@ -541,10 +543,9 @@ export const EntityFieldLayout: React.FC<EntityFieldLayoutProps> = observer(
 
         desc: { defaultValue: curField?.desc },
       },
-      [curField],
+      [curField, drawerProps.visible],
     );
     const { Form, Item } = useForm(store);
-    const { setVisible, ...drawerProps } = useDrawer();
     const newField = useCallback(() => {
       setCurField(undefined);
       store.reset();
@@ -576,8 +577,8 @@ export const EntityFieldLayout: React.FC<EntityFieldLayoutProps> = observer(
           } else {
             entityStore.fields.push(params[1]);
           }
-
           setVisible(false);
+          store.reset();
         },
         onError(err) {
           notification.error({
@@ -599,7 +600,6 @@ export const EntityFieldLayout: React.FC<EntityFieldLayoutProps> = observer(
           if (field) {
             Object.assign(field, params[2]);
           }
-
           setVisible(false);
         },
         onError(err) {
@@ -612,7 +612,6 @@ export const EntityFieldLayout: React.FC<EntityFieldLayoutProps> = observer(
       },
     );
     const submitting = adding || updating;
-
     const submitField = useCallback(() => {
       store.submit(({ values, errs }) => {
         if (!errs) {
@@ -719,6 +718,12 @@ export const EntityFieldLayout: React.FC<EntityFieldLayoutProps> = observer(
                                   ),
                                 });
                                 setVisible(false);
+                                entityStore.fields.splice(
+                                  entityStore.fields.findIndex(
+                                    field => field.code === curField.code,
+                                  ),
+                                  1,
+                                );
                               })
                               .catch((err: Error) => {
                                 notification.error({
@@ -756,6 +761,7 @@ export const EntityFieldLayout: React.FC<EntityFieldLayoutProps> = observer(
                 style={{ marginRight: 8 }}
                 onClick={() => {
                   setVisible(false);
+                  store.reset();
                 }}
               >
                 取消
