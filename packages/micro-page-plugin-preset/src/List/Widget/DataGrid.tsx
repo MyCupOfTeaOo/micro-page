@@ -409,7 +409,15 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
             'datagrid-sidebar-content-hide': visibleKey !== 'col',
           })}
         >
-          <div className="sidebar-title">展示列</div>
+          <div
+            className="sidebar-title"
+            style={{
+              height: (BaseGrid.defaultProps?.headerHeight || 56) + 1,
+              lineHeight: (BaseGrid.defaultProps?.headerHeight || 56) + 1,
+            }}
+          >
+            展示列
+          </div>
           <span>
             <Input
               prefix={<SearchOutlined />}
@@ -447,7 +455,15 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
             'datagrid-sidebar-content-hide': visibleKey !== 'vitualCol',
           })}
         >
-          <div className="sidebar-title">虚拟列设置</div>
+          <div
+            className="sidebar-title"
+            style={{
+              height: (BaseGrid.defaultProps?.headerHeight || 56) + 1,
+              lineHeight: (BaseGrid.defaultProps?.headerHeight || 56) + 1,
+            }}
+          >
+            虚拟列设置
+          </div>
           <Decision
             actual={columnDefs.every(col => col.field !== virtualField.code)}
           >
