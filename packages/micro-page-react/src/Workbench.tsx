@@ -1276,7 +1276,6 @@ const PageEdit: React.FC<PageEditProps> = () => {
   if (!template) {
     return <NotFound title="找不到页面对应的模版" />;
   }
-
   return (
     <div className="micro-page-content-layout">
       <PageContext.Provider

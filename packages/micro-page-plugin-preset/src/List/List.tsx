@@ -32,9 +32,11 @@ import {
   useCore,
 } from 'micro-page-react/es/hooks';
 import { Button, Modal, message, notification } from 'antd';
+import { SelectProps } from 'antd/es/select/index';
 import { FormConfigs } from 'teaness/es/Form/typings';
 import { ItemProps } from 'teaness/es/Form/Item';
 import { useHistory, Link, useLocation } from 'react-router-dom';
+import { CancellablePromise } from 'mobx/lib/api/flow';
 import QueryItem, { QueryItemConfig } from './Widget/QueryItem';
 import Panel from '../Utils/Panel';
 import { ListPluginContext, PageRenderContext } from './context';
@@ -94,7 +96,14 @@ const DragHandleBtn = SortableHandle(() => (
   </div>
 ));
 
-export interface ListPluginOptions {}
+export interface ListPluginOptions {
+  completeRequest?: {
+    url?(): CancellablePromise<SelectProps<string>['options']>;
+  };
+  completeFilter?: {
+    url?: SelectProps<string>['filterOption'];
+  };
+}
 export interface WorkBenchRenderProps {}
 export interface PageRender {}
 
@@ -180,9 +189,15 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
     );
 
     const { gridRef, setQueryData, queryDataRef, gridProps } = useDataGrid();
-
+    const listPluginContext = useMemo(
+      () => ({
+        ...this.context!,
+        options: this.options,
+      }),
+      [this.context, this.options],
+    );
     return (
-      <ListPluginContext.Provider value={this.context!}>
+      <ListPluginContext.Provider value={listPluginContext}>
         <div className="micro-plugin-list-layout">
           <div className="micro-plugin-list-content">
             <div className="micro-plugin-list-extra">

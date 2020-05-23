@@ -16,6 +16,7 @@ import {
   vertical,
   Decision,
   BaseGrid,
+  useValue,
 } from 'teaness';
 import classnames from 'classnames';
 import {
@@ -26,6 +27,7 @@ import {
   Alert,
   Button,
   Popconfirm,
+  AutoComplete,
 } from 'antd';
 import { ColDef } from 'ag-grid-community/dist/lib/entities/colDef';
 import {
@@ -59,6 +61,7 @@ import {
 } from 'react-sortable-hoc';
 import { CancellablePromise } from 'micro-page-core/es/utils';
 import arrayMove from 'array-move';
+import { SelectProps } from 'antd/es/select';
 import { Source } from '../typings';
 import { ListPluginContext } from '../context';
 import Operation, { OperationConfig } from '../Component/DataGridOperation';
@@ -289,6 +292,17 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
     };
   }, []);
 
+  const urlOptions = useValue<SelectProps<string>['options']>();
+
+  useEffect(() => {
+    const req = listPluginContext.options?.completeRequest?.url?.();
+    req
+      ?.then(res => {
+        urlOptions.value = res;
+      })
+      .catch(err => console.error(err));
+    return req?.cancel;
+  }, []);
   return (
     <div className="list-datagrid">
       <Grid
@@ -384,7 +398,10 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
                   </span>
                 }
               >
-                <Input />
+                <AutoComplete
+                  options={urlOptions.value}
+                  filterOption={listPluginContext.options?.completeFilter?.url}
+                />
               </Item>
               <Item
                 id="historyMemory"
