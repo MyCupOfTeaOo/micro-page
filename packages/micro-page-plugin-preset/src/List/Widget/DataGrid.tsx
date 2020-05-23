@@ -62,6 +62,7 @@ import {
 import { CancellablePromise } from 'micro-page-core/es/utils';
 import arrayMove from 'array-move';
 import { SelectProps } from 'antd/es/select';
+import { ServiceContext } from 'micro-page-react';
 import { Source } from '../typings';
 import { ListPluginContext } from '../context';
 import Operation, { OperationConfig } from '../Component/DataGridOperation';
@@ -293,9 +294,11 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
   }, []);
 
   const urlOptions = useValue<SelectProps<string>['options']>();
-
+  const serviceContext = useContext(ServiceContext);
   useEffect(() => {
-    const req = listPluginContext.options?.completeRequest?.url?.();
+    const req = listPluginContext.options?.completeRequest?.url?.call(
+      serviceContext,
+    );
     req
       ?.then(res => {
         urlOptions.value = res;
@@ -389,6 +392,7 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
               <Item
                 id="fetchUrl"
                 text="请求路径"
+                childStyle={{ height: 32 }}
                 renderText={
                   <span>
                     请求路径{' '}
@@ -399,6 +403,9 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
                 }
               >
                 <AutoComplete
+                  style={{
+                    width: '100%',
+                  }}
                   options={urlOptions.value}
                   filterOption={listPluginContext.options?.completeFilter?.url}
                 />

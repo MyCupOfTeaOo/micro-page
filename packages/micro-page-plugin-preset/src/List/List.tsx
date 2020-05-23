@@ -37,6 +37,7 @@ import { FormConfigs } from 'teaness/es/Form/typings';
 import { ItemProps } from 'teaness/es/Form/Item';
 import { useHistory, Link, useLocation } from 'react-router-dom';
 import { CancellablePromise } from 'mobx/lib/api/flow';
+import { ServiceThis } from 'micro-page-core';
 import QueryItem, { QueryItemConfig } from './Widget/QueryItem';
 import Panel from '../Utils/Panel';
 import { ListPluginContext, PageRenderContext } from './context';
@@ -98,7 +99,7 @@ const DragHandleBtn = SortableHandle(() => (
 
 export interface ListPluginOptions {
   completeRequest?: {
-    url?(): CancellablePromise<SelectProps<string>['options']>;
+    url?(this: ServiceThis): CancellablePromise<SelectProps<string>['options']>;
   };
   completeFilter?: {
     url?: SelectProps<string>['filterOption'];
