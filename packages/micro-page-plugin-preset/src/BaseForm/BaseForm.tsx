@@ -46,6 +46,7 @@ import {
   useCore,
   useQuery,
 } from 'micro-page-react/es/hooks';
+import { join } from 'micro-page-react/es/utils';
 import {
   SortableContainer,
   SortableElement,
@@ -57,7 +58,7 @@ import arrayMove from 'array-move';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import Axios from 'axios';
 import { Source, PageRenderThis } from './typings';
-import { join, contextKeyRegExp } from '../Utils/utils';
+import { contextKeyRegExp } from '../Utils/utils';
 import FormItem, { FormItemConfig } from './Widget/FormItem';
 import { FormPluginContext, PageRenderContext } from './context';
 import FormButton, { FormButtonConfig } from './Widget/FormButton';

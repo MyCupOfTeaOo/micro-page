@@ -47,6 +47,7 @@ import { UpdatePage } from 'micro-page-core/es/Service';
 import { Page, Template, Field, FieldType } from 'micro-page-core/es/typings';
 import { typeOptions } from 'micro-page-core/es/constant';
 import './image';
+import { join } from './utils';
 import Stringsvg from './assets/string.svg';
 import Numbersvg from './assets/number.svg';
 import Datesvg from './assets/date.svg';
@@ -90,7 +91,7 @@ export interface RenderProps {
   core: MicroPageCore;
 }
 
-const Render: React.FC<RenderProps> = ({ core, basePath = '' }) => {
+const Render: React.FC<RenderProps> = ({ core, basePath = '/' }) => {
   return (
     <RenderContext.Provider
       value={{
@@ -100,16 +101,16 @@ const Render: React.FC<RenderProps> = ({ core, basePath = '' }) => {
     >
       <div className="micro-layout">
         <Switch>
-          <Route exact path={`${basePath}/`}>
+          <Route exact path={basePath}>
             <EntityList />
           </Route>
 
-          <Route path={`${basePath}/:id`}>
+          <Route path={join(basePath, ':id')}>
             <EntityEdit />
           </Route>
           <Redirect
             to={{
-              pathname: `${basePath}/`,
+              pathname: basePath,
             }}
           />
         </Switch>
@@ -168,7 +169,7 @@ export const EntityList: React.FC<EntityListProps> = () => {
       onSuccess(res) {
         setVisible(false);
         history.push({
-          pathname: `${basePath}/${res.id}`,
+          pathname: join(basePath, res.id),
         });
       },
       onError(err) {
@@ -213,7 +214,7 @@ export const EntityList: React.FC<EntityListProps> = () => {
                   className="micro-card"
                   onClick={() => {
                     history.push({
-                      pathname: `${basePath}/${entity.id}`,
+                      pathname: join(basePath, entity.id),
                     });
                   }}
                 >
@@ -353,14 +354,14 @@ export const EntityEdit: React.FC<EntityEditProps> = observer(() => {
     >
       <div className="micro-main micro-main-entity">
         <Switch>
-          <Route path={`${basePath}/${id}`} exact>
+          <Route path={join(basePath, id)} exact>
             <EntityEditHeader />
             <EntityContent />
           </Route>
-          <Route path={`${basePath}/${id}/:id/preview`} exact>
+          <Route path={join(basePath, id, ':id/preview')} exact>
             <Preview />
           </Route>
-          <Route path={`${basePath}/${id}/:id`} exact>
+          <Route path={join(basePath, id, ':id')} exact>
             <PageEdit />
           </Route>
         </Switch>
@@ -878,9 +879,7 @@ export const PageList: React.FC<PageListProps> = observer(() => {
             <span>
               页面
               <a
-                onClick={() =>
-                  history.push(`${basePath}/${params[0]}/${data.id}`)
-                }
+                onClick={() => history.push(join(basePath, params[0], data.id))}
               >
                 {params[1].title}
               </a>
@@ -914,7 +913,7 @@ export const PageList: React.FC<PageListProps> = observer(() => {
                 key={page.id}
                 className="micro-card"
                 onClick={() => {
-                  history.push(`${basePath}/${entityStore.id}/${page.id}`);
+                  history.push(join(basePath, entityStore.id, page.id));
                 }}
               >
                 <img className="cover" alt="封面" src={page.template?.cover} />
@@ -1109,7 +1108,7 @@ export const EntityEditHeader: React.FC<EntityEditHeaderProps> = observer(
                               </span>
                             ),
                           });
-                          history.push(`${basePath}/`);
+                          history.push(basePath);
                         })
                         .catch((err: Error) => {
                           notification.error({

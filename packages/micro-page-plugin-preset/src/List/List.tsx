@@ -31,6 +31,7 @@ import {
   useEntity,
   useCore,
 } from 'micro-page-react/es/hooks';
+import { join } from 'micro-page-react/es/utils';
 import { Button, Modal, message, notification } from 'antd';
 import { SelectProps } from 'antd/es/select/index';
 import { FormConfigs } from 'teaness/es/Form/typings';
@@ -44,7 +45,6 @@ import { ListPluginContext, PageRenderContext } from './context';
 import QueryButton, { QueryButtonConfig } from './Widget/QueryButton';
 import { Source, PageRenderThis } from './typings';
 import DataGrid from './Widget/DataGrid';
-import { join } from '../Utils/utils';
 import { baseComMap } from '../Utils/comMap';
 
 /* eslint-disable
