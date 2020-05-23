@@ -392,7 +392,6 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
               <Item
                 id="fetchUrl"
                 text="请求路径"
-                childStyle={{ height: 32 }}
                 renderText={
                   <span>
                     请求路径{' '}
@@ -405,6 +404,7 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
                 <AutoComplete
                   style={{
                     width: '100%',
+                    lineHeight: 'inherit',
                   }}
                   options={urlOptions.value}
                   filterOption={listPluginContext.options?.completeFilter?.url}
