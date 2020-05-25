@@ -141,7 +141,7 @@ const FormItemProd: React.FC<FormItemProps> = ({
       return baseComMap.input;
     }
   }, [config?.type]);
-  return <com.com {...rest} {...extra} {...props} />;
+  return <com.com {...props} {...rest} {...extra} />;
 };
 
 export default FormItem;
