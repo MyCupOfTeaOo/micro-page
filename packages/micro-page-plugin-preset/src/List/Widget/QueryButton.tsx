@@ -1,7 +1,8 @@
-import React, { useEffect, useContext, useCallback } from 'react';
-import { Button, Select, Input, Switch } from 'antd';
+import React, { useEffect, useContext, useCallback, useMemo } from 'react';
+import { Button, Select, Input, Switch, Tooltip } from 'antd';
 import { ButtonProps } from 'antd/lib/button';
 import { observer } from 'mobx-react';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { useStore, useForm, vertical, Show } from 'teaness';
 import { ListPluginContext, PageRenderContext } from '../context';
 import { queryFuncMap } from '../GenericFunctions';
@@ -13,6 +14,7 @@ export interface QueryButtonConfig {
   type?: ButtonProps['type'];
   danger?: boolean;
   size?: ButtonProps['size'];
+  isSubmit?: boolean;
 }
 
 export interface QueryButtonProps {
@@ -65,6 +67,9 @@ const QueryButtonConfig: React.FC<QueryButtonProps> = observer(props => {
       size: {
         defaultValue: props.config?.size || 'middle',
       },
+      isSubmit: {
+        defaultValue: props.config?.isSubmit,
+      },
       funcProps: {
         defaultValue: props.config?.funcProps,
       },
@@ -113,6 +118,21 @@ const QueryButtonConfig: React.FC<QueryButtonProps> = observer(props => {
         <Item text="按钮大小" id="size">
           <Select options={sizeOptions} allowClear />
         </Item>
+        <Item
+          text="回车触发"
+          renderText={
+            <span>
+              回车触发{' '}
+              <Tooltip title="一个页面最多只能有一个按钮开启">
+                <QuestionCircleOutlined />
+              </Tooltip>
+            </span>
+          }
+          id="isSubmit"
+          valueName="checked"
+        >
+          <Switch />
+        </Item>
         <Item text="调用函数" id="func">
           <Select options={queryFuncOptions} allowClear />
         </Item>
@@ -126,7 +146,7 @@ const QueryButtonConfig: React.FC<QueryButtonProps> = observer(props => {
   );
 });
 const QueryButtonProd: React.FC<QueryButtonProps> = props => {
-  const { name, func, funcProps, ...rest } = props.config || {};
+  const { name, func, funcProps, isSubmit, ...rest } = props.config || {};
   const pageRenderContext = useContext(PageRenderContext);
 
   const apply = useCallback(() => {
@@ -138,9 +158,19 @@ const QueryButtonProd: React.FC<QueryButtonProps> = props => {
       });
     }
   }, []);
-
+  const htmlType = useMemo<'submit' | undefined>(() => {
+    if (props.mode === 'prod') {
+      if (isSubmit) {
+        return 'submit';
+      }
+    }
+  }, []);
   return (
-    <Button {...rest} onClick={props.mode === 'prod' ? apply : undefined}>
+    <Button
+      {...rest}
+      htmlType={htmlType}
+      onClick={props.mode === 'prod' ? apply : undefined}
+    >
       {name}
     </Button>
   );

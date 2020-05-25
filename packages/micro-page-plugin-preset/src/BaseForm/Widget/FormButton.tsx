@@ -134,17 +134,11 @@ const FormButtonConfig: React.FC<FormButtonProps> = observer(props => {
         <Item text="按钮大小" id="size">
           <Select options={sizeOptions} allowClear />
         </Item>
-        <Item text="调用函数" id="func">
-          <Select options={formFuncOptions} allowClear />
-        </Item>
-        <Item text="是否校验表单" id="checked" valueName="checked">
-          <Switch />
-        </Item>
         <Item
-          text="触发提交"
+          text="回车触发"
           renderText={
             <span>
-              触发提交{' '}
+              回车触发{' '}
               <Tooltip title="一个页面最多只能有一个按钮开启">
                 <QuestionCircleOutlined />
               </Tooltip>
@@ -154,6 +148,12 @@ const FormButtonConfig: React.FC<FormButtonProps> = observer(props => {
           valueName="checked"
         >
           <Switch />
+        </Item>
+        <Item text="是否校验表单" id="checked" valueName="checked">
+          <Switch />
+        </Item>
+        <Item text="调用函数" id="func">
+          <Select options={formFuncOptions} allowClear />
         </Item>
         <Item
           text="断言"
