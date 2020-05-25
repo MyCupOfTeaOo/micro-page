@@ -2,7 +2,7 @@ import React, { useMemo, useContext, useEffect } from 'react';
 import { Params } from 'teaness/es/Form/Context/Autowired';
 import { observer } from 'mobx-react';
 import { Field } from 'micro-page-core/es/typings';
-import { Input } from 'antd';
+import { Input, Switch } from 'antd';
 import { Select, useStore, useForm, vertical, Show } from 'teaness';
 import { baseComMap, getComponentOptions } from '../../Utils/comMap';
 import { ListPluginContext } from '../context';
@@ -13,6 +13,7 @@ export interface QueryItemConfig {
    * baseComMap key
    */
   type?: string;
+  disabled?: boolean;
   placeholder?: string;
   /**
    * 额外配置
@@ -49,6 +50,9 @@ const QueryItemConfig: React.FC<QueryItemProps> = observer(
         },
         type: {
           defaultValue: config?.type || 'input',
+        },
+        disabled: {
+          defaultValue: config?.disabled ?? false,
         },
         placeholder: {
           defaultValue:
@@ -103,6 +107,9 @@ const QueryItemConfig: React.FC<QueryItemProps> = observer(
         <Form layout={vertical} className="panel-form">
           <Item text="控件类型" id="type">
             <Select options={options} />
+          </Item>
+          <Item text="禁止输入" id="disabled" valueName="checked">
+            <Switch />
           </Item>
           <Item text="提示语" id="placeholder">
             <Input />
