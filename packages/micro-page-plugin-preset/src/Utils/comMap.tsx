@@ -19,11 +19,81 @@ import { Params } from 'teaness/es/Form/Context/Autowired';
 /*                                    Extra                                   */
 /* -------------------------------------------------------------------------- */
 
-interface DatePickerExtra {
+export interface InputExtraProps {
+  type?:
+    | 'button'
+    | 'checkbox'
+    | 'color'
+    | 'date'
+    | 'datetime-local'
+    | 'email'
+    | 'file'
+    | 'hidden'
+    | 'image'
+    | 'month'
+    | 'number'
+    | 'password'
+    | 'radio'
+    | 'range'
+    | 'reset'
+    | 'search'
+    | 'submit'
+    | 'tel'
+    | 'text'
+    | 'time'
+    | 'url'
+    | 'week';
+}
+
+export const InputTypeOptions = [
+  { value: 'button', label: 'button' },
+  { value: 'checkbox', label: 'checkbox' },
+  { value: 'color', label: 'color' },
+  { value: 'date', label: 'date' },
+  { value: 'datetime-local', label: 'datetime-local' },
+  { value: 'email', label: 'email' },
+  { value: 'file', label: 'file' },
+  { value: 'hidden', label: 'hidden' },
+  { value: 'image', label: 'image' },
+  { value: 'month', label: 'month' },
+  { value: 'number', label: 'number' },
+  { value: 'password', label: 'password' },
+  { value: 'radio', label: 'radio' },
+  { value: 'range', label: 'range' },
+  { value: 'reset', label: 'reset' },
+  { value: 'search', label: 'search' },
+  { value: 'submit', label: 'submit' },
+  { value: 'tel', label: 'tel' },
+  { value: 'text', label: 'text' },
+  { value: 'time', label: 'time' },
+  { value: 'url', label: 'url' },
+  { value: 'week', label: 'week' },
+];
+
+export const InputExtra: React.FC<Params> = ({ id, value, onChange }) => {
+  return (
+    <>
+      <Label id={`${id}-type`} text="类型">
+        <Select
+          options={InputTypeOptions}
+          value={value?.type}
+          onChange={v => {
+            onChange({
+              ...value,
+              type: v,
+            });
+          }}
+        />
+      </Label>
+    </>
+  );
+};
+
+export interface DatePickerExtraProps {
   bordered?: boolean;
 }
 
-const DatepickerExtra: React.FC<Params> = ({ id, value, onChange }) => {
+export const DatepickerExtra: React.FC<Params> = ({ id, value, onChange }) => {
   return (
     <>
       <Label id={`${id}-bordered`} text="是否有边框">
@@ -130,6 +200,7 @@ export const baseComMap: {
         placeholder: '请输入',
       };
     },
+    extra: InputExtra,
   },
   select: {
     name: '下拉框',
@@ -153,7 +224,7 @@ export const baseComMap: {
         },
       };
     },
-    getFormConfig(config: Config<DatePickerExtra>, field) {
+    getFormConfig(config: Config<DatePickerExtraProps>, field) {
       return {
         parse(value?: moment.Moment | string) {
           if (moment.isMoment(value)) {
