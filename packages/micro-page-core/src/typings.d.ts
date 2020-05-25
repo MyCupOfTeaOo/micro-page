@@ -16,6 +16,7 @@ import {
   UpdatePage,
   DeletePage,
   MovePage,
+  CopyPage,
 } from './Service';
 
 /**
@@ -84,6 +85,7 @@ export interface Config {
     updatePage: UpdatePage;
     deletePage: DeletePage;
     movePage: MovePage;
+    copyPage: CopyPage;
   };
   request: AxiosInstance;
 }

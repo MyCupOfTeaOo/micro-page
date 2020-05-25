@@ -35,6 +35,7 @@ import {
   MenuUnfoldOutlined,
   ArrowLeftOutlined,
   ShareAltOutlined,
+  CopyOutlined,
 } from '@ant-design/icons';
 import {
   Switch,
@@ -931,16 +932,110 @@ export const PageList: React.FC<PageListProps> = observer(() => {
                   </div>
                 </div>
                 <div className="micro-card-btns">
+                  <Button
+                    block
+                    onClick={() => {
+                      let { title } = page;
+                      Modal.confirm({
+                        icon: <ExclamationCircleOutlined />,
+                        title: `复制页面: ${title}`,
+                        content: (
+                          <label htmlFor="page-title">
+                            <div>页面标题:</div>
+                            <Input
+                              id="page-title"
+                              defaultValue={page.title}
+                              onChange={e => {
+                                title = e.target.value;
+                              }}
+                            />
+                          </label>
+                        ),
+                        onOk() {
+                          if (!title) {
+                            message.error('页面标题不能为空');
+                            return Promise.reject();
+                          }
+                          return core.service.copyPage
+                            .call(serviceContext, entityStore.id, page.id, {
+                              title,
+                            })
+                            .then((data: Page) => {
+                              entityStore.addPage(data);
+                              notification.success({
+                                placement: 'bottomRight',
+                                message: '复制页面成功',
+                                description: (
+                                  <span>
+                                    页面
+                                    <a
+                                      onClick={() =>
+                                        history.push(
+                                          join(
+                                            basePath,
+                                            entityStore.id,
+                                            data.id,
+                                          ),
+                                        )
+                                      }
+                                    >
+                                      {title}
+                                    </a>
+                                    已添加
+                                  </span>
+                                ),
+                              });
+                            });
+                        },
+                      });
+                    }}
+                    icon={<CopyOutlined />}
+                  />
                   <CopyToClipboard
                     text={getReactPageRenderText(entityStore.id, page.id)}
                     onCopy={() => {
                       message.success('拷贝成功');
                     }}
                   >
-                    <Button block icon={<ShareAltOutlined />}>
-                      拷贝
-                    </Button>
+                    <Button block icon={<ShareAltOutlined />} />
                   </CopyToClipboard>
+                  <Button
+                    block
+                    type="primary"
+                    danger
+                    onClick={() => {
+                      Modal.confirm({
+                        icon: <ExclamationCircleOutlined />,
+                        content: (
+                          <span>
+                            确定要删除页面
+                            <strong className="dnager">{page.title}</strong>吗
+                          </span>
+                        ),
+                        onOk() {
+                          return core.service.deletePage
+                            .call(serviceContext, entityStore.id, page.id)
+                            .then(() => {
+                              entityStore.deletePage(page.id)
+                              notification.success({
+                                message: '删除页面成功',
+                                placement: 'bottomRight',
+                                description: (
+                                  <span>
+                                    页面
+                                    <strong className="danger">
+                                      {page.title}
+                                    </strong>
+                                    已被删除
+                                  </span>
+                                ),
+                              });
+                            });
+                        },
+                      });
+                    }}
+                    icon={<DeleteOutlined />}
+                  />
                 </div>
               </div>
             ))}

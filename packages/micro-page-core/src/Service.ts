@@ -113,6 +113,16 @@ export type AddPage = (
 ) => CancellablePromise<Page>;
 
 /**
+ * 拷贝页面
+ */
+export type CopyPage = (
+  this: ServiceThis,
+  entityId: string,
+  fromPageId: string,
+  data: Partial<Page>,
+) => CancellablePromise<Page>;
+
+/**
  * 获取页面
  */
 export type GetPage = (
