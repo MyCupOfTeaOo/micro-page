@@ -985,6 +985,14 @@ export const PageList: React.FC<PageListProps> = observer(() => {
                                   </span>
                                 ),
                               });
+                            })
+                            .catch((err: Error) => {
+                              notification.error({
+                                message: '复制页面失败',
+                                description: err.message,
+                                placement: 'bottomRight',
+                              });
+                              return Promise.reject(err);
                             });
                         },
                       });
@@ -1016,7 +1024,7 @@ export const PageList: React.FC<PageListProps> = observer(() => {
                           return core.service.deletePage
                             .call(serviceContext, entityStore.id, page.id)
                             .then(() => {
-                              entityStore.deletePage(page.id)
+                              entityStore.deletePage(page.id);
                               notification.success({
                                 message: '删除页面成功',
                                 placement: 'bottomRight',
@@ -1030,6 +1038,14 @@ export const PageList: React.FC<PageListProps> = observer(() => {
                                   </span>
                                 ),
                               });
+                            })
+                            .catch((err: Error) => {
+                              notification.error({
+                                message: '删除页面失败',
+                                description: err.message,
+                                placement: 'bottomRight',
+                              });
+                              return Promise.reject(err);
                             });
                         },
                       });
