@@ -190,6 +190,7 @@ export const baseComMap: {
         placeholder: '请输入',
       };
     },
+    extra: InputExtra,
   },
   inputnumber: {
     name: '数字输入框',
@@ -200,7 +201,6 @@ export const baseComMap: {
         placeholder: '请输入',
       };
     },
-    extra: InputExtra,
   },
   select: {
     name: '下拉框',
