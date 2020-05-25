@@ -171,9 +171,30 @@ $success: $green-5;
   transform: translateY(-100%);
 }
 
+.micro-header-share-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateY(-8px);
+}
+
+.micro-header-shrink {
+  .micro-header-shrink-btn {
+    right: 0;
+    top: 0;
+    transform: translateY(100%);
+  }
+  .micro-header-share-btn {
+    right: 0;
+    top: 0;
+    transform: translateY(200%);
+  }
+}
+
 .micro-header-goback-btn {
   position: absolute;
   right: 0;
+  top: 0;
 }
 
 .micro-main {
@@ -222,6 +243,38 @@ $success: $green-5;
   }
   .micro-body {
     flex: 1 1 auto;
+  }
+}
+
+.micro-mask-layout {
+  position: relative;
+  transition: all 0.4s;
+  .micro-card-btns {
+    display: none;
+  }
+
+  &:hover {
+    .micro-card-btns {
+      display: block;
+      animation: fadeIn 0.4s;
+    }
+  }
+}
+
+.micro-card-btns {
+  transition: all 0.4s;
+  position: absolute;
+  bottom: $small-padding;
+  right: $small-padding;
+  width: calc(100% - #{2 * $small-padding});
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

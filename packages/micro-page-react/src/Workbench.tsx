@@ -21,6 +21,7 @@ import {
   Tooltip,
   Result,
 } from 'antd';
+import CopyToClipboard from 'react-copy-to-clipboard';
 import { ResultProps } from 'antd/lib/result';
 import { useSpring, useTransition, animated, useChain } from 'react-spring';
 import { observer } from 'mobx-react';
@@ -33,6 +34,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   ArrowLeftOutlined,
+  ShareAltOutlined,
 } from '@ant-design/icons';
 import {
   Switch,
@@ -47,7 +49,7 @@ import { UpdatePage } from 'micro-page-core/es/Service';
 import { Page, Template, Field, FieldType } from 'micro-page-core/es/typings';
 import { typeOptions } from 'micro-page-core/es/constant';
 import './image';
-import { join } from './utils';
+import { join, getReactPageRenderText } from './utils';
 import Stringsvg from './assets/string.svg';
 import Numbersvg from './assets/number.svg';
 import Datesvg from './assets/date.svg';
@@ -909,17 +911,36 @@ export const PageList: React.FC<PageListProps> = observer(() => {
           </div>
           <div className="micro-page-list">
             {entityStore.pages?.map(page => (
-              <div
-                key={page.id}
-                className="micro-card"
-                onClick={() => {
-                  history.push(join(basePath, entityStore.id, page.id));
-                }}
-              >
-                <img className="cover" alt="封面" src={page.template?.cover} />
-                <div className="content center">
-                  <h4 className="ellipsis">{page.title}</h4>
-                  <div className="ellipsis desc">{page.desc || '暂无描述'}</div>
+              <div key={page.id} className="micro-mask-layout">
+                <div
+                  className="micro-card"
+                  onClick={() => {
+                    history.push(join(basePath, entityStore.id, page.id));
+                  }}
+                >
+                  <img
+                    className="cover"
+                    alt="封面"
+                    src={page.template?.cover}
+                  />
+                  <div className="content center">
+                    <h4 className="ellipsis">{page.title}</h4>
+                    <div className="ellipsis desc">
+                      {page.desc || '暂无描述'}
+                    </div>
+                  </div>
+                </div>
+                <div className="micro-card-btns">
+                  <CopyToClipboard
+                    text={getReactPageRenderText(entityStore.id, page.id)}
+                    onCopy={() => {
+                      message.success('拷贝成功');
+                    }}
+                  >
+                    <Button block icon={<ShareAltOutlined />}>
+                      拷贝
+                    </Button>
+                  </CopyToClipboard>
                 </div>
               </div>
             ))}
@@ -1291,15 +1312,6 @@ const PageEdit: React.FC<PageEditProps> = () => {
           subTitle={template.name}
           onBack={() => history.goBack()}
         >
-          <Button
-            size="large"
-            onClick={() => {
-              setShrink((prev: boolean) => !prev);
-            }}
-            type="link"
-            icon={shrink ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            className="micro-header-shrink-btn"
-          />
           <Show actual={shrink} expect>
             <Button
               size="large"
@@ -1309,6 +1321,28 @@ const PageEdit: React.FC<PageEditProps> = () => {
               className="micro-header-goback-btn"
             />
           </Show>
+          <Button
+            size="large"
+            onClick={() => {
+              setShrink((prev: boolean) => !prev);
+            }}
+            type="link"
+            icon={shrink ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            className="micro-header-shrink-btn"
+          />
+          <CopyToClipboard
+            text={getReactPageRenderText(entityStore.id, id)}
+            onCopy={() => {
+              message.success('拷贝成功');
+            }}
+          >
+            <Button
+              size="large"
+              type="link"
+              icon={<ShareAltOutlined />}
+              className="micro-header-share-btn"
+            />
+          </CopyToClipboard>
           <div className="micro-desc">
             <div className="text-muti-line">{page?.desc}</div>
           </div>

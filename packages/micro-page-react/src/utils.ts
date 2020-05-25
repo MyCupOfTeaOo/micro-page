@@ -9,3 +9,10 @@ export function join(...path: string[]) {
     return `${allPath}/${curPath}`;
   }, '');
 }
+
+export function getReactEntityRenderText(projectId: string) {
+  return `<MicroPageReact.Entity core={core} id="${projectId}" />`;
+}
+export function getReactPageRenderText(projectId: string, pageId: string) {
+  return `<MicroPageReact.Page core={core} id="${projectId}" entityId="${pageId}" />`;
+}
