@@ -1,6 +1,6 @@
 {
   "name": "micro-page-plugin-preset",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "react page configurable plugin",
   "main": "./es/index.js",
   "module": "./es/index.js",
