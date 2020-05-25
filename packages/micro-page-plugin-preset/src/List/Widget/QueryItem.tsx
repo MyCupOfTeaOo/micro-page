@@ -133,7 +133,7 @@ const QueryItemProd: React.FC<QueryItemProps> = ({
   checkresult,
   ...props
 }) => {
-  const { type, fieldCode, extra, ...rest } = config || {};
+  const { type, fieldCode, extra, ...rest } = config || ({} as QueryItemConfig);
   const com = useMemo(() => {
     if (type) {
       return baseComMap[type];
@@ -141,7 +141,14 @@ const QueryItemProd: React.FC<QueryItemProps> = ({
       return baseComMap.input;
     }
   }, [config?.type]);
-  return <com.com {...props} {...rest} {...extra} />;
+  return (
+    <com.com
+      {...props}
+      {...rest}
+      {...extra}
+      disabled={props.disabled || rest.disabled}
+    />
+  );
 };
 
 export default QueryItem;

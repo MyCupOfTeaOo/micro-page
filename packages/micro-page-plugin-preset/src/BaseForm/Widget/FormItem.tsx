@@ -133,7 +133,7 @@ const FormItemProd: React.FC<FormItemProps> = ({
   checkresult,
   ...props
 }) => {
-  const { type, fieldCode, extra, ...rest } = config || {};
+  const { type, fieldCode, extra, ...rest } = config || ({} as FormItemConfig);
   const com = useMemo(() => {
     if (type) {
       return baseComMap[type];
@@ -141,7 +141,14 @@ const FormItemProd: React.FC<FormItemProps> = ({
       return baseComMap.input;
     }
   }, [config?.type]);
-  return <com.com {...props} {...rest} {...extra} />;
+  return (
+    <com.com
+      {...props}
+      {...rest}
+      {...extra}
+      disabled={props.disabled || rest.disabled}
+    />
+  );
 };
 
 export default FormItem;
