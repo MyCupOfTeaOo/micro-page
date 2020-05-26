@@ -58,11 +58,11 @@ const Workbench : React.FC<any> =  () => {
 ```ts
 // 按实体嵌入
 const Entity: React.FC<any> = () => {
-  return <MicroPageReact.Entity core={core} id="实体 id" />;
+  return <MicroPageReact.Entity core={core} entityId="实体 id" />;
 };
 // 按页面嵌入
 const Page: React.FC<any> = () => {
-  return <MicroPageReact.Page core={core} id="页面 id" entityId="实体 id" />;
+  return <MicroPageReact.Page core={core} pageId="页面 id" entityId="实体 id" />;
 };
 ```
 

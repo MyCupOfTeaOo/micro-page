@@ -10,9 +10,9 @@ export function join(...path: string[]) {
   }, '');
 }
 
-export function getReactEntityRenderText(projectId: string) {
-  return `<MicroPageReact.Entity core={core} id="${projectId}" />`;
+export function getReactEntityRenderText(entityId: string) {
+  return `<MicroPageReact.Entity core={core} entityId="${entityId}" />`;
 }
-export function getReactPageRenderText(projectId: string, pageId: string) {
-  return `<MicroPageReact.Page core={core} id="${projectId}" entityId="${pageId}" />`;
+export function getReactPageRenderText(entityId: string, pageId: string) {
+  return `<MicroPageReact.Page core={core} entityId="${entityId}" pageId="${pageId}" />`;
 }
