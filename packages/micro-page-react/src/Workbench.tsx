@@ -50,7 +50,7 @@ import { UpdatePage } from 'micro-page-core/es/Service';
 import { Page, Template, Field, FieldType } from 'micro-page-core/es/typings';
 import { typeOptions } from 'micro-page-core/es/constant';
 import './image';
-import { join, getReactPageRenderText } from './utils';
+import { join } from './utils';
 import Stringsvg from './assets/string.svg';
 import Numbersvg from './assets/number.svg';
 import Datesvg from './assets/date.svg';
@@ -75,6 +75,7 @@ import {
   EntityContext,
   PageContext,
   ServiceContext,
+  PageConfigContext,
 } from './context';
 import { EntityStore } from './store';
 import { PageRender } from './RunTime';
@@ -861,7 +862,7 @@ export const PageList: React.FC<PageListProps> = observer(() => {
   const basePath = useBasePath();
   const history = useHistory();
   const serviceContext = useContext(ServiceContext);
-
+  const pageConfigContext = useContext(PageConfigContext);
   const { run: addPage, loading } = useRequest(
     core.service.addPage.bind(serviceContext),
     {
@@ -1000,13 +1001,17 @@ export const PageList: React.FC<PageListProps> = observer(() => {
                     icon={<CopyOutlined />}
                   />
                   <CopyToClipboard
-                    text={getReactPageRenderText(entityStore.id, page.id)}
+                    text={pageConfigContext.getReactPageRenderText(
+                      entityStore.id,
+                      page.id,
+                    )}
                     onCopy={() => {
                       message.success('拷贝成功');
                     }}
                   >
                     <Button block icon={<ShareAltOutlined />} />
                   </CopyToClipboard>
+
                   <Button
                     block
                     type="primary"
@@ -1370,6 +1375,8 @@ const PageEdit: React.FC<PageEditProps> = () => {
 
   const [shrink, setShrink] = useLocalStorage('pageheader', false);
   const template = useSearchTemplate(page?.key);
+  const pageConfigContext = useContext(PageConfigContext);
+
   // 注入上下文
   useEffect(() => {
     if (template) {
@@ -1442,7 +1449,7 @@ const PageEdit: React.FC<PageEditProps> = () => {
             className="micro-header-shrink-btn"
           />
           <CopyToClipboard
-            text={getReactPageRenderText(entityStore.id, id)}
+            text={pageConfigContext.getReactPageRenderText(entityStore.id, id)}
             onCopy={() => {
               message.success('拷贝成功');
             }}

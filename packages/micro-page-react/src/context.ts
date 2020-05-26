@@ -2,6 +2,7 @@ import { createContext } from 'react';
 import MicroPageCore, { ServiceThis } from 'micro-page-core';
 import { Page, Template, Entity } from 'micro-page-core/es/typings';
 import { EntityStore } from './store';
+import { getReactPageRenderText, getReactEntityRenderText } from './utils';
 
 export const RenderContext = createContext<{
   core: MicroPageCore;
@@ -16,6 +17,14 @@ export const PageContext = createContext<{
   page: Page;
   template: Template;
 }>({} as any);
+
+export const PageConfigContext = createContext<{
+  getReactEntityRenderText(entityId: string): string;
+  getReactPageRenderText(entityId: string, pageId: string): string;
+}>({
+  getReactEntityRenderText,
+  getReactPageRenderText,
+});
 
 export const RunTimeEntityContext = createContext<
   Entity & {
