@@ -227,12 +227,12 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
               return (
                 <span className="list-btn-group">
                   {mySource.grid.operationConfig?.map((config, i) => (
-                    <Operation
-                      key={i}
-                      mode="dev"
-                      config={config}
-                      rowData={data}
-                    />
+                    <span key={i} onClick={() => {
+                      setVisibleKey("vitualCol")
+                      setCurVistualOperate(config);
+                    }}>
+                      <Operation mode="dev" config={config} rowData={data} />
+                    </span>
                   ))}
                 </span>
               );
