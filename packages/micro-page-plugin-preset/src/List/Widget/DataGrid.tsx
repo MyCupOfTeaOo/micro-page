@@ -214,35 +214,37 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
       ));
   }, [entityStore.fields, search, columnDefs.length, columnDefs]);
   const formatColumnDefs = useMemo<ColumnDefs>(() => {
-    return columnDefs.map(col => {
-      if (col.field === virtualField.code) {
+    return columnDefs
+      .filter(col => fieldMap[col.field])
+      .map(col => {
+        if (col.field === virtualField.code) {
+          return {
+            ...col,
+            headerClass: 'operationCol',
+            headerName: fieldMap[col.field!].name,
+            cellRendererFramework({ data }: { data: any }) {
+              const { source: mySource } = usePage<Source>();
+              return (
+                <span className="list-btn-group">
+                  {mySource.grid.operationConfig?.map((config, i) => (
+                    <Operation
+                      key={i}
+                      mode="dev"
+                      config={config}
+                      rowData={data}
+                    />
+                  ))}
+                </span>
+              );
+            },
+          };
+        }
+
         return {
           ...col,
-          headerClass: 'operationCol',
           headerName: fieldMap[col.field!].name,
-          cellRendererFramework({ data }: { data: any }) {
-            const { source: mySource } = usePage<Source>();
-            return (
-              <span className="list-btn-group">
-                {mySource.grid.operationConfig?.map((config, i) => (
-                  <Operation
-                    key={i}
-                    mode="dev"
-                    config={config}
-                    rowData={data}
-                  />
-                ))}
-              </span>
-            );
-          },
         };
-      }
-
-      return {
-        ...col,
-        headerName: fieldMap[col.field!].name,
-      };
-    });
+      });
   }, [columnDefs.length, columnDefs]);
   const baseStore = useStore<BaseConfig>(
     {
@@ -601,33 +603,35 @@ const DataGridProd: React.FC<DataGridProps> = ({ gridProps }) => {
     { [virtualField.code]: virtualField },
   );
   const columnDefs = useMemo<ColumnDefs>(() => {
-    return source.grid.columnDefs.map(col => {
-      if (col.field === virtualField.code) {
+    return source.grid.columnDefs
+      .filter(col => fieldMap[col.field])
+      .map(col => {
+        if (col.field === virtualField.code) {
+          return {
+            ...col,
+            cellRendererFramework({ data }: { data: any }) {
+              return (
+                <span className="list-btn-group">
+                  {source.grid.operationConfig?.map((config, i) => (
+                    <Operation
+                      key={i}
+                      mode="prod"
+                      config={config}
+                      rowData={data}
+                    />
+                  ))}
+                </span>
+              );
+            },
+            headerName: '操作',
+          };
+        }
+
         return {
           ...col,
-          cellRendererFramework({ data }: { data: any }) {
-            return (
-              <span className="list-btn-group">
-                {source.grid.operationConfig?.map((config, i) => (
-                  <Operation
-                    key={i}
-                    mode="prod"
-                    config={config}
-                    rowData={data}
-                  />
-                ))}
-              </span>
-            );
-          },
-          headerName: '操作',
+          headerName: fieldMap[col.field!].name,
         };
-      }
-
-      return {
-        ...col,
-        headerName: fieldMap[col.field!].name,
-      };
-    });
+      });
   }, []);
   return (
     <Grid
