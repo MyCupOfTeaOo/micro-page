@@ -29,6 +29,6 @@
   "dependencies": {
     "micro-page-core": "^0.2.13",
     "micro-page-plugin-preset": "^0.2.16",
-    "micro-page-react": "^0.2.15" 
+    "micro-page-react": "^0.2.15"
   }
 }
