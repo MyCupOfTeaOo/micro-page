@@ -14,9 +14,7 @@
 ## 在 react 中使用
 
 ```tsx
-import MicroPageCore from 'micro-page-core';
-import MicroPageReact from 'micro-page-react';
-import { List, BaseForm } from 'micro-page-plugin-preset';
+import { MicroPageCore, MicroPageReact, List, BaseForm } from 'micro-page';
 
 
 const core = new MicroPageCore({
@@ -47,7 +45,7 @@ const core = new MicroPageCore({
 
 // 嵌入工作台,随便放在你的页面某处
 const Workbench : React.FC<any> =  () => {
-  return <MicroPageReact.Render core={core} />;
+  return <MicroPageReact.Workbench core={core} />;
 };
 
 ```
@@ -58,11 +56,13 @@ const Workbench : React.FC<any> =  () => {
 ```ts
 // 按实体嵌入
 const Entity: React.FC<any> = () => {
-  return <MicroPageReact.Entity core={core} entityId="实体 id" />;
+  return <MicroPageReact.EntityRender core={core} entityId="实体 id" />;
 };
 // 按页面嵌入
 const Page: React.FC<any> = () => {
-  return <MicroPageReact.Page core={core} pageId="页面 id" entityId="实体 id" />;
+  return (
+    <MicroPageReact.PageRender core={core} pageId="页面 id" entityId="实体 id" />
+  );
 };
 ```
 

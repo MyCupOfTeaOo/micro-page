@@ -6,9 +6,16 @@ import { Dispatch, SetStateAction } from 'react';
 import { FormItemConfig } from './Widget/FormItem';
 import { FormButtonConfig } from './Widget/FormButton';
 
+export interface LoadItem {
+  url?: string;
+  assert?: string;
+}
+
+export type Load = LoadItem[];
+
 export interface Source {
   title?: string;
-  loadUrl?: string;
+  loadData?: Load;
   layout: string;
   formItem: FormItemConfig[];
   formButton: FormButtonConfig[];

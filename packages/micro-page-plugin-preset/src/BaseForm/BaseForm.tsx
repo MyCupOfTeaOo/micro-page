@@ -15,6 +15,7 @@ import React, {
 } from 'react';
 import { Field } from 'micro-page-core/es/typings';
 import lodash from 'lodash';
+import expectjs from 'expect.js';
 import { PagePlugin } from 'micro-page-core/es/Plugin';
 import { Decision, Select, Form, Item, useStore, Label } from 'teaness';
 import {
@@ -57,7 +58,8 @@ import { FormConfigs } from 'teaness/es/Form/typings';
 import arrayMove from 'array-move';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import Axios from 'axios';
-import { Source, PageRenderThis } from './typings';
+import { createFunc } from 'tea-eval';
+import { Source, PageRenderThis, Load } from './typings';
 import { contextKeyRegExp } from '../Utils/utils';
 import FormItem, { FormItemConfig } from './Widget/FormItem';
 import { FormPluginContext, PageRenderContext } from './context';
@@ -65,6 +67,7 @@ import FormButton, { FormButtonConfig } from './Widget/FormButton';
 import Panel from '../Utils/Panel';
 import { layoutMap, layouts } from './utils';
 import { baseComMap } from '../Utils/comMap';
+import LoadUrl from './Component/LoadUrl';
 
 const SortableForm = SortableContainer((props: any) => {
   return (
@@ -146,10 +149,9 @@ export default class BaseForm extends PagePlugin<
         return prevSource;
       });
     }, []);
-    const setLoadUrl = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
+    const setLoadUrl = useCallback((value: Load) => {
       this.context?.saveConfig(prevSource => {
-        prevSource.loadUrl = value;
+        prevSource.loadData = value;
         return prevSource;
       });
     }, []);
@@ -299,7 +301,7 @@ export default class BaseForm extends PagePlugin<
                   </span>
                 }
               >
-                <Input value={source.loadUrl} onChange={setLoadUrl} />
+                <LoadUrl value={source.loadData} onChange={setLoadUrl} />
               </Label>
             </Card>
             <Card
@@ -688,34 +690,63 @@ export default class BaseForm extends PagePlugin<
       const context = {
         params,
         query,
+        expect: expectjs,
       };
-      const lodaUrl = (source.loadUrl || '').replace(
-        contextKeyRegExp,
-        matchkey => {
+      let isCancel = false;
+      const s = Axios.CancelToken.source();
+      function loadFunc(url: string) {
+        const theUrl = (url || '').replace(contextKeyRegExp, matchkey => {
           const key = matchkey.slice(2, -1);
           return lodash.get(context, key, key);
-        },
-      );
-      const s = Axios.CancelToken.source();
-      let isCancel = false;
-      core.request
-        .get(lodaUrl, {
-          cancelToken: s.token,
-        })
-        .then(req => {
-          setData(req);
-        })
-        .catch((err: Error) => {
-          if (!isCancel) {
-            Modal.error({
-              title: '加载信息失败',
-              content: err.message,
-            });
-          }
-        })
-        .finally(() => {
-          if (!isCancel) setLoading(false);
         });
+        core.request
+          .get(theUrl, {
+            cancelToken: s.token,
+          })
+          .then(req => {
+            setData(req);
+          })
+          .catch((err: Error) => {
+            if (!isCancel) {
+              Modal.error({
+                title: '加载信息失败',
+                content: err.message,
+              });
+            }
+          })
+          .finally(() => {
+            if (!isCancel) setLoading(false);
+          });
+      }
+      source.loadData?.some(loadItem => {
+        if (loadItem.url) {
+          if (loadItem.assert) {
+            try {
+              const assertFunc = createFunc(
+                loadItem.assert,
+                undefined,
+                context,
+              );
+              try {
+                assertFunc();
+                loadFunc(loadItem.url);
+                return true;
+              } catch (error) {
+                // eslint-disable-next-line
+                console.log((error as Error).message);
+                return false;
+              }
+            } catch (error) {
+              console.error('创建断言函数失败');
+              console.error(error);
+              return false;
+            }
+          } else {
+            loadFunc(loadItem.url);
+            return true;
+          }
+        }
+      });
       return () => {
         isCancel = true;
         s.cancel();

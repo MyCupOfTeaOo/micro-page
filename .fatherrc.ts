@@ -12,7 +12,12 @@ if (fs.existsSync('./.babelrc')) {
 const options: IBundleOptions = {
   esm: 'babel',
   extraBabelPlugins: babelPlugin,
-  pkgs: ['micro-page-core', 'micro-page-react', 'micro-page-plugin-preset'],
+  pkgs: [
+    'micro-page-core',
+    'micro-page-react',
+    'micro-page-plugin-preset',
+    'micro-page',
+  ],
 };
 
 export default options;

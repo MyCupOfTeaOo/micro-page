@@ -1,0 +1,34 @@
+{
+  "name": "micro-page",
+  "version": "0.2.15",
+  "description": "react page configurable",
+  "main": "./es/index.js",
+  "module": "./es/index.js",
+  "scripts": {
+    "build": "father build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/MyCupOfTeaOo/micro-page.git"
+  },
+  "keywords": [
+    "page",
+    "configurable",
+    "react"
+  ],
+  "author": "tea",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MyCupOfTeaOo/micro-page/issues"
+  },
+  "homepage": "https://github.com/MyCupOfTeaOo/micro-page#readme",
+  "files": [
+    "dist",
+    "es"
+  ],
+  "dependencies": {
+    "micro-page-core": "^0.2.13",
+    "micro-page-plugin-preset": "^0.2.16",
+    "micro-page-react": "^0.2.15" 
+  }
+}
