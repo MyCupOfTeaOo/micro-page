@@ -262,37 +262,8 @@ export default class BaseForm extends PagePlugin<
                         maxWidth: 'inherit',
                       }}
                       title={
-                        <span className="mycode">
-                          支持参数注入,注入格式为:
-                          <code>/xxxx/${'{上下文参数}'}</code>
-                          <br />
-                          可选上下文参数:
-                          <ul>
-                            <li>
-                              <a
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href="https://reacttraining.com/react-router/web/api/Hooks/useparams"
-                              >
-                                <code>params</code>
-                              </a>
-                            </li>
-                            <li>
-                              <a
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href="https://reacttraining.com/react-router/web/example/query-parameters"
-                              >
-                                <code>query</code>
-                              </a>
-                            </li>
-                          </ul>
-                          例:&nbsp;
-                          <code>/test?id=${'{query.id}'}</code>
-                          <br />
-                          <strong className="danger">
-                            只支持get加载,接口自行处理好加载逻辑,比如没有id则为new,有id则为get
-                          </strong>
+                        <span>
+                          只要有一个断言通过就停止向下判断,通过后调用该路径加载数据
                         </span>
                       }
                     >
