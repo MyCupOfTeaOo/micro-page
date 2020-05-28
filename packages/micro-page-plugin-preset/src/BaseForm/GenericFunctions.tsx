@@ -482,13 +482,11 @@ const InterfaceExtra: React.FC<Params> = ({ id, value, onChange }) => {
 export const formFuncMap: {
   [key: string]: Func;
 } = {
-  submit: {
-    name: '提交',
-    apply(this) {},
-  },
   reset: {
     name: '重置',
-    apply(this) {},
+    apply(this) {
+      this.store.reset();
+    },
   },
   goback: {
     name: '返回',
