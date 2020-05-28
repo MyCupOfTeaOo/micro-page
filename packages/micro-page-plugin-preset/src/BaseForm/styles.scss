@@ -135,3 +135,27 @@ $component-background: #fff;
     margin-left: $small-padding;
   }
 }
+
+.baseform-load {
+  padding: 0;
+  list-style-type: none;
+  li {
+    position: relative;
+
+    border: 1px solid $border-color;
+    padding: $small-padding;
+    margin-bottom: $small-padding;
+    display: flex;
+    & > div {
+      width: 100%;
+      padding: 0 $tiny-padding;
+    }
+  }
+
+  .baseform-load-remove {
+    position: absolute;
+    right: $small-padding;
+    top: 0;
+    transform: translateY(-50%);
+  }
+}

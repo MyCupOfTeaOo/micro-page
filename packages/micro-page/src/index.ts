@@ -1,6 +1,6 @@
 import MicroPageCore from 'micro-page-core';
-import * as MicroPageReact from 'micro-page-react';
 
-export { MicroPageCore, MicroPageReact };
+export { MicroPageCore };
 
+export * from 'micro-page-react';
 export * from 'micro-page-plugin-preset';

@@ -149,7 +149,7 @@ export default class BaseForm extends PagePlugin<
         return prevSource;
       });
     }, []);
-    const setLoadUrl = useCallback((value: Load) => {
+    const setLoadUrl = useCallback((value?: Load) => {
       this.context?.saveConfig(prevSource => {
         prevSource.loadData = value;
         return prevSource;
@@ -255,7 +255,7 @@ export default class BaseForm extends PagePlugin<
                 id="url"
                 renderText={
                   <span>
-                    数据加载路径{' '}
+                    数据加载策略{' '}
                     <Tooltip
                       placement="rightTop"
                       overlayStyle={{
