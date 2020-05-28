@@ -1,6 +1,6 @@
 {
   "name": "micro-page-react",
-  "version": "0.2.15",
+  "version": "0.2.17-alpha.0",
   "description": "react page configurable",
   "main": "./es/index.js",
   "module": "./es/index.js",

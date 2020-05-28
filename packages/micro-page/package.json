@@ -1,6 +1,6 @@
 {
   "name": "micro-page",
-  "version": "0.2.15",
+  "version": "0.2.17-alpha.0",
   "description": "react page configurable",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -28,7 +28,7 @@
   ],
   "dependencies": {
     "micro-page-core": "^0.2.13",
-    "micro-page-plugin-preset": "^0.2.16",
-    "micro-page-react": "^0.2.15"
+    "micro-page-plugin-preset": "^0.2.17-alpha.0",
+    "micro-page-react": "^0.2.17-alpha.0"
   }
 }
