@@ -1480,13 +1480,30 @@ const PageEdit: React.FC<PageEditProps> = () => {
 export interface PageContentProps {}
 
 export const PageContent: React.FC<PageContentProps> = () => {
-  const { template } = useContext(PageContext);
+  const { template, setPage, updatePage, page } = useContext(PageContext);
+  const entityStore = useEntityStore();
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   return (
     <div className="micro-page-content">
       <div className="micro-page-extra">
         <Input
+          value={page?.route?.pathname}
+          onChange={e => {
+            setPage?.(prevPage => {
+              if (!prevPage) return prevPage;
+              const newPage = {
+                ...prevPage,
+                route: e.target.value
+                  ? {
+                      pathname: e.target.value,
+                    }
+                  : undefined,
+              };
+              updatePage?.([entityStore.id, newPage]);
+              return newPage;
+            });
+          }}
           addonBefore="/"
           className="micro-page-route"
           placeholder="路由地址"
