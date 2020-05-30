@@ -41,7 +41,7 @@ import { Button, Modal, message, notification } from 'antd';
 import { SelectProps } from 'antd/es/select/index';
 import { FormConfigs } from 'teaness/es/Form/typings';
 import { ItemProps } from 'teaness/es/Form/Item';
-import { RowContext } from 'teaness/es/Grid/Context';
+import { LabelContext } from 'teaness/es/Label/Context';
 import { useHistory, useLocation } from 'react-router-dom';
 import { CancellablePromise } from 'mobx/lib/api/flow';
 import { ServiceThis } from 'micro-page-core';
@@ -77,11 +77,16 @@ const SortableDiv = SortableElement((props: any) => {
 });
 
 const SortableItem = SortableElement<ItemProps>((props: ItemProps) => {
-  const rowContext = useContext(RowContext)
-  return <Item {...props} colProps={{
-    ...rowContext,
-    className: "list-item-config"
-  }} />
+  const labelContext = useContext(LabelContext);
+  return (
+    <Item
+      {...props}
+      colProps={{
+        ...labelContext?.colProps,
+        className: 'list-item-config',
+      }}
+    />
+  );
 });
 
 const DragHandle = SortableHandle(() => (
