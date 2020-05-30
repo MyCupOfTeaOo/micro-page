@@ -1490,13 +1490,14 @@ export const PageContent: React.FC<PageContentProps> = () => {
         <Input
           value={page?.route?.pathname}
           onChange={e => {
+            const { value } = e.target;
             setPage?.(prevPage => {
               if (!prevPage) return prevPage;
               const newPage = {
                 ...prevPage,
-                route: e.target.value
+                route: value
                   ? {
-                      pathname: e.target.value,
+                      pathname: value,
                     }
                   : undefined,
               };
