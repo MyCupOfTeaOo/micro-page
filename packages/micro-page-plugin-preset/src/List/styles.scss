@@ -5,6 +5,7 @@
   display: flex;
   overflow: auto;
   flex-direction: row;
+
   .tea-fold-card {
     z-index: 2;
   }
@@ -33,6 +34,10 @@
   display: flex;
   overflow: auto;
   flex-direction: column;
+}
+
+.sortable-item {
+  z-index: 99;
 }
 
 .micro-plugin-list-mask {
@@ -86,6 +91,10 @@
 
 .search-btn-layout {
   display: flex;
+  z-index: 9;
+}
+.list-item-config {
+  z-index: 9;
 }
 
 .micro-plugin-list-search {

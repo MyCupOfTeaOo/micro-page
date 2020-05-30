@@ -44,11 +44,6 @@
   }
 }
 
-.micro-plugin-baseform-extra {
-  display: flex;
-  padding: $small-padding;
-  justify-content: flex-end;
-}
 .tea-footer-toolbar {
   z-index: 9;
 }
@@ -99,7 +94,6 @@
 }
 
 $toolbar-height: 56px;
-$component-background: #fff;
 
 .baseform-footer-toolbar {
   z-index: 10;

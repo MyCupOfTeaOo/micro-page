@@ -16,6 +16,26 @@ export const EntityContext = createContext<{
 export const PageContext = createContext<{
   page: Page;
   template: Template;
+  /**
+   * 配置期间才能取到
+   */
+  setPage?: React.Dispatch<React.SetStateAction<Page<any> | undefined>>;
+  /**
+   * 配置期间才能取到
+   */
+  updatePage?:((
+    args: [string, Page<any>],
+    options?:
+      | {
+          onSuccess?(): void;
+          onError?(err: Error): void;
+          onFinish?(): void;
+        }
+      | undefined,
+  ) => void) & {
+    cancel(): void;
+    flush(): void;
+  };
 }>({} as any);
 
 export const PageConfigContext = createContext<{

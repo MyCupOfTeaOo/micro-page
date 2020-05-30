@@ -28,9 +28,6 @@ export class EntityStore {
   })[] = [];
 
   @observable
-  public route?: any;
-
-  @observable
   public lastResponse?: GetResponseType<
     ReturnType<MicroPageCore['service']['getEntity']>
   >;
@@ -53,7 +50,6 @@ export class EntityStore {
     } else {
       this.fields = entity.fields || [];
     }
-    this.route = entity.route;
     this.pages =
       entity.pages?.map(page => ({
         ...page,

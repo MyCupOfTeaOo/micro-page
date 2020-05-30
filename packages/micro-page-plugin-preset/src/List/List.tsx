@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useRef, useMemo } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useMemo,
+  useContext,
+} from 'react';
 import {
   useStore,
   Form,
@@ -31,12 +37,12 @@ import {
   useEntity,
   useCore,
 } from 'micro-page-react/es/hooks';
-import { join } from 'micro-page-react/es/utils';
 import { Button, Modal, message, notification } from 'antd';
 import { SelectProps } from 'antd/es/select/index';
 import { FormConfigs } from 'teaness/es/Form/typings';
 import { ItemProps } from 'teaness/es/Form/Item';
-import { useHistory, Link, useLocation } from 'react-router-dom';
+import { RowContext } from 'teaness/es/Grid/Context';
+import { useHistory, useLocation } from 'react-router-dom';
 import { CancellablePromise } from 'mobx/lib/api/flow';
 import { ServiceThis } from 'micro-page-core';
 import QueryItem, { QueryItemConfig } from './Widget/QueryItem';
@@ -70,9 +76,13 @@ const SortableDiv = SortableElement((props: any) => {
   return <div {...props} />;
 });
 
-const SortableItem = SortableElement<ItemProps>((props: ItemProps) => (
-  <Item {...props} />
-));
+const SortableItem = SortableElement<ItemProps>((props: ItemProps) => {
+  const rowContext = useContext(RowContext)
+  return <Item {...props} colProps={{
+    ...rowContext,
+    className: "list-item-config"
+  }} />
+});
 
 const DragHandle = SortableHandle(() => (
   <div
@@ -122,7 +132,6 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
   workBenchRender: React.FC<WorkBenchRenderProps> = () => {
     const { setVisible: setNewVisible, ...modalProps } = useModal();
     const entityStore = useEntityStore();
-    const history = useHistory();
     const newFieldCode = useRef<string>();
     const { source } = usePage<Source>();
     const store = useStore(
@@ -145,7 +154,6 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
       setCurQueryItem(undefined);
       setCurQueryBtn(queryButtonConfig);
     }, []);
-    const [loading, setLoading] = useState(false);
     const queryItemMap = useMemo(
       () =>
         source.queryItem.reduce<{
@@ -201,35 +209,7 @@ export default class List extends PagePlugin<ListPluginOptions, Source> {
       <ListPluginContext.Provider value={listPluginContext}>
         <div className="micro-plugin-list-layout">
           <div className="micro-plugin-list-content">
-            <div className="micro-plugin-list-extra">
-              <Button.Group>
-                <Link to={join(history.location.pathname, 'preview')}>
-                  <Button type="primary">预览</Button>
-                </Link>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    setLoading(true);
-                    this.context?.saveConfig(prevSource => prevSource, {
-                      onSuccess() {
-                        notification.success({
-                          placement: 'bottomRight',
-                          message: '保存成功',
-                        });
-                      },
-                      onFinish() {
-                        setLoading(false);
-                      },
-                    });
-                    this.context?.flush();
-                  }}
-                  loading={loading}
-                >
-                  立即保存
-                </Button>
-              </Button.Group>
-            </div>
-            <FoldCard title="查询条件" className="micro-plugin-list-search">
+            <FoldCard title="查询条件" className="micro-plugin-list-search ">
               <SortableForm
                 store={store}
                 useDragHandle

@@ -94,7 +94,8 @@
   color: $warning;
 }
 
-.vitual-operate-btn-group {
+.vitual-operate-btn-group,
+.ant-btn-group.vitual-operate-btn-group {
   position: absolute;
   right: 0;
   & > span {

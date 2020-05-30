@@ -37,7 +37,7 @@ import {
   DeleteOutlined,
   QuestionCircleOutlined,
 } from '@ant-design/icons';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import {
   usePage,
@@ -47,7 +47,6 @@ import {
   useCore,
   useQuery,
 } from 'micro-page-react/es/hooks';
-import { join } from 'micro-page-react/es/utils';
 import {
   SortableContainer,
   SortableElement,
@@ -128,8 +127,6 @@ export default class BaseForm extends PagePlugin<
   }
 
   workBenchRender: React.FC<WorkBenchRenderProps> = () => {
-    const history = useHistory();
-    const [loading, setLoading] = useState(false);
     const entityStore = useEntityStore();
     const { source } = usePage<Source>();
     const fieldMap = useMemo(
@@ -222,34 +219,6 @@ export default class BaseForm extends PagePlugin<
       <FormPluginContext.Provider value={this.context!}>
         <div className="micro-plugin-baseform-layout">
           <div className="micro-plugin-baseform-content">
-            <div className="micro-plugin-baseform-extra">
-              <Button.Group>
-                <Link to={join(history.location.pathname, 'preview')}>
-                  <Button type="primary">预览</Button>
-                </Link>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    setLoading(true);
-                    this.context?.saveConfig(prevSource => prevSource, {
-                      onSuccess() {
-                        notification.success({
-                          placement: 'bottomRight',
-                          message: '保存成功',
-                        });
-                      },
-                      onFinish() {
-                        setLoading(false);
-                      },
-                    });
-                    this.context?.flush();
-                  }}
-                  loading={loading}
-                >
-                  立即保存
-                </Button>
-              </Button.Group>
-            </div>
             <Card title="基本配置" className="baseform-baseconfig">
               <Label
                 id="url"

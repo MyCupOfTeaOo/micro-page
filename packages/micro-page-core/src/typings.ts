@@ -46,12 +46,6 @@ export interface Entity {
    * 页面
    */
   pages: Page[];
-
-  /**
-   * 路由
-   * @todo 未完成,控制页面路由
-   */
-  route?: any;
 }
 
 /**
@@ -134,6 +128,12 @@ export interface Page<S = any> {
    * 页面模版配置描述
    */
   source: S;
+  /**
+   * 路由
+   */
+  route?: {
+    pathname: string;
+  };
 }
 
 export interface Field {

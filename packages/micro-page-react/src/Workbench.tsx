@@ -43,6 +43,7 @@ import {
   Redirect,
   useHistory,
   useParams,
+  Link,
 } from 'react-router-dom';
 import { Decision, useStore, useForm, vertical, Show, Select } from 'teaness';
 import MicroPageCore from 'micro-page-core';
@@ -1420,6 +1421,8 @@ const PageEdit: React.FC<PageEditProps> = () => {
         value={{
           template,
           page: page as Page,
+          setPage,
+          updatePage,
         }}
       >
         <PageHeader
@@ -1478,9 +1481,44 @@ export interface PageContentProps {}
 
 export const PageContent: React.FC<PageContentProps> = () => {
   const { template } = useContext(PageContext);
-
+  const history = useHistory();
+  const [loading, setLoading] = useState(false);
   return (
     <div className="micro-page-content">
+      <div className="micro-page-extra">
+        <Input
+          addonBefore="/"
+          className="micro-page-route"
+          placeholder="路由地址"
+        />
+        <Button.Group>
+          <Link to={join(history.location.pathname, 'preview')}>
+            <Button type="primary">预览</Button>
+          </Link>
+          <Button
+            type="primary"
+            onClick={() => {
+              setLoading(true);
+              template.plugin.context?.saveConfig(prevSource => prevSource, {
+                onSuccess() {
+                  notification.success({
+                    placement: 'bottomRight',
+                    message: '保存成功',
+                  });
+                },
+                onFinish() {
+                  setLoading(false);
+                },
+              });
+              template.plugin.context?.flush();
+            }}
+            loading={loading}
+          >
+            立即保存
+          </Button>
+        </Button.Group>
+      </div>
+
       <template.plugin.workBenchRender />
     </div>
   );
