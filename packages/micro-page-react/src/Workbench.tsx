@@ -4,7 +4,6 @@ import React, {
   useMemo,
   useCallback,
   useEffect,
-  useRef,
 } from 'react';
 import {
   Button,
@@ -23,7 +22,6 @@ import {
 } from 'antd';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { ResultProps } from 'antd/lib/result';
-import { useSpring, useTransition, animated, useChain } from 'react-spring';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 import lodash from 'lodash-es';
@@ -1161,47 +1159,15 @@ export const EntityEditHeader: React.FC<EntityEditHeaderProps> = observer(
         desc: entityStore.desc,
       });
     }, [entityStore]);
-    const springRef = useRef(null);
-    const transRef = useRef(null);
-    const transitions = useTransition(edited, null, {
-      ref: transRef,
-      from: { opacity: 0 },
-      enter: { opacity: 1 },
-      leave: { opacity: 0 },
-      config: {
-        duration: 200,
-      },
-    });
-    const spring = useSpring({
-      ref: springRef,
-      from: {
-        opacity: edited ? 0 : 1,
-        transform: edited ? 'translateX(-100px)' : 'translateX(0px)',
-      },
-      to: {
-        opacity: edited ? 1 : 0,
-        transform: edited ? 'translateX(0px)' : 'translateX(-100px)',
-      },
-      config: {
-        duration: 200,
-      },
-    });
-    useChain(edited ? [springRef, transRef] : [transRef, springRef], [0, 0.4]);
+
     const runtimeConfigContext = useContext(RuntimeConfigContext);
     return (
       <PageHeader
         className="micro-header"
         onBack={() => history.goBack()}
-        extra={transitions.map(({ item, key, props, state }) => {
-          return item ? (
-            <animated.div
-              key="done"
-              style={{
-                ...props,
-                ...(state === 'leave' ? undefined : spring),
-                display: state === 'leave' ? 'none' : undefined,
-              }}
-            >
+        extra={
+          edited ? (
+            <div key="done">
               <Button
                 className="done"
                 type="primary"
@@ -1210,15 +1176,9 @@ export const EntityEditHeader: React.FC<EntityEditHeaderProps> = observer(
               >
                 完成
               </Button>
-            </animated.div>
+            </div>
           ) : (
-            <animated.div
-              key={key}
-              style={{
-                ...props,
-                display: state === 'leave' ? 'none' : undefined,
-              }}
-            >
+            <div>
               <Button
                 type="primary"
                 style={{
@@ -1292,9 +1252,9 @@ export const EntityEditHeader: React.FC<EntityEditHeaderProps> = observer(
                 删除
                 <DeleteOutlined />
               </Button>
-            </animated.div>
-          );
-        })}
+            </div>
+          )
+        }
         title={
           <Decision actual={edited}>
             <Decision.Case expect>
@@ -1314,7 +1274,11 @@ export const EntityEditHeader: React.FC<EntityEditHeaderProps> = observer(
             message.success('拷贝成功');
           }}
         >
-          <Button block icon={<ShareAltOutlined />} />
+          <Button
+            type="link"
+            icon={<ShareAltOutlined />}
+            className="micro-header-share-btn"
+          />
         </CopyToClipboard>
         <div className="micro-header-img">
           <img src={coverImg} alt="content" width="100%" />
