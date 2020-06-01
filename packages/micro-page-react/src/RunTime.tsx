@@ -1,6 +1,8 @@
 import React, { useMemo, useEffect, useContext } from 'react';
 import MicroPageCore from 'micro-page-core';
-import { notification } from 'antd';
+import { notification, Result, Button } from 'antd';
+import { Decision } from 'teaness';
+import { Switch, Route, Redirect, useHistory } from 'react-router-dom';
 import {
   RunTimeEntityContext,
   PageContext,
@@ -9,6 +11,7 @@ import {
 } from './context';
 import { useRequest } from './hooks';
 import { Loading, NotFound } from './Workbench';
+import { join } from './utils';
 
 export interface PageRenderProps {
   core: MicroPageCore;
@@ -89,6 +92,28 @@ export const PageRender: React.FC<PageRenderProps> = ({
   );
 };
 
+export interface RoutesNotFound {}
+export const RoutesNotFound: React.FC<RoutesNotFound> = () => {
+  const history = useHistory();
+  return (
+    <Result
+      status={404}
+      title="404"
+      subTitle="找不到该页面,请返回或回到首页"
+      extra={
+        <React.Fragment>
+          <Button type="primary" onClick={() => history.push('/')}>
+            回到首页
+          </Button>
+          <Button type="primary" onClick={() => history.goBack()}>
+            返回上一页
+          </Button>
+        </React.Fragment>
+      }
+    />
+  );
+};
+
 export interface EntityRenderProps {
   core: MicroPageCore;
   basePath?: string;
@@ -96,8 +121,89 @@ export interface EntityRenderProps {
    * 实体id
    */
   entityId: string;
+  /**
+   *
+   */
+  pageRoutesNotFound?: React.ReactNode;
 }
 
-export const EntityRender: React.FC<EntityRenderProps> = () => {
-  return <div>EntityRenderProps</div>;
+const EntityRender: React.FC<EntityRenderProps> = ({
+  core,
+  basePath = ' ',
+  entityId,
+  pageRoutesNotFound,
+}) => {
+  const serviceContext = useContext(ServiceContext);
+  const { data: entity, loading = true } = useRequest(
+    core.service.getEntity.bind(serviceContext),
+    {
+      params: [entityId],
+      onError(err) {
+        notification.error({
+          message: '渲染失败,无法加载实体数据',
+          description: err.message,
+          placement: 'bottomRight',
+        });
+      },
+      first: true,
+    },
+  );
+
+  const { data: pageRoutes, loading: loadingRoutes = true } = useRequest(
+    core.service.getPageRoutes.bind(serviceContext),
+    {
+      params: [entityId],
+      onError(err) {
+        notification.error({
+          message: '渲染失败,无法加载实体数据',
+          description: err.message,
+          placement: 'bottomRight',
+        });
+      },
+      first: true,
+    },
+  );
+
+  if (loading || loadingRoutes) {
+    return <Loading />;
+  }
+
+  if (!entity) {
+    return <NotFound title="找不到实体" />;
+  }
+  if (!pageRoutes) {
+    return <NotFound title="找不到实体路由" />;
+  }
+
+  const filterPageRoutes = pageRoutes.filter(pageRoute => pageRoute.route);
+  return (
+    <Switch>
+      <Decision actual={!filterPageRoutes.length}>
+        <Decision.Case expect>{pageRoutesNotFound}</Decision.Case>
+        <Decision.Case expect={false}>
+          {filterPageRoutes.map(pageRoute => (
+            <Route exact path={join(basePath, pageRoute.route?.pathname!)}>
+              <PageRender
+                basePath={join(basePath, pageRoute.route?.pathname!)}
+                core={core}
+                entityId={entityId}
+                pageId={pageRoute.pageId}
+              />
+            </Route>
+          ))}
+          <Redirect
+            to={{
+              pathname: join(basePath, filterPageRoutes[0].route?.pathname!),
+            }}
+          />
+        </Decision.Case>
+      </Decision>
+    </Switch>
+  );
 };
+
+EntityRender.defaultProps = {
+  pageRoutesNotFound: RoutesNotFound,
+};
+
+export { EntityRender };

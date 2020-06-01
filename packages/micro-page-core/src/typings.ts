@@ -17,6 +17,7 @@ import {
   DeletePage,
   MovePage,
   CopyPage,
+  GetPageRoutes,
 } from './Service';
 
 /**
@@ -80,6 +81,7 @@ export interface Config {
     deletePage: DeletePage;
     movePage: MovePage;
     copyPage: CopyPage;
+    getPageRoutes: GetPageRoutes;
   };
   request: AxiosInstance;
 }
@@ -131,9 +133,11 @@ export interface Page<S = any> {
   /**
    * 路由
    */
-  route?: {
-    pathname: string;
-  };
+  route?: MyRoute;
+}
+
+export interface MyRoute {
+  pathname: string;
 }
 
 export interface Field {
@@ -173,3 +177,8 @@ export type FieldType =
  * @see {@link https://github.com/yiminghe/async-validator}
  */
 export interface Rule extends RuleItem {}
+
+export interface PageRoute {
+  pageId: string;
+  route?: MyRoute;
+}

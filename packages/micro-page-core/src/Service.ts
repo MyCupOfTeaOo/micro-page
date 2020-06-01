@@ -1,4 +1,4 @@
-import { Entity, Page, Field } from './typings';
+import { Entity, Page, Field, PageRoute } from './typings';
 import { CancellablePromise } from './utils';
 
 export interface ServiceThis {
@@ -158,3 +158,11 @@ export type MovePage = (
   from: number,
   to: number,
 ) => CancellablePromise<void>;
+
+/**
+ * 获取所有页面路由
+ */
+export type GetPageRoutes = (
+  this: ServiceThis,
+  entityId: string,
+) => CancellablePromise<PageRoute[]>;
