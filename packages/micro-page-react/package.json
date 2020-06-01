@@ -36,6 +36,7 @@
     "@types/react-router": "5.1.5",
     "@types/react-router-dom": "5.1.3",
     "antd": "^4.1.5",
+    "array-move": "^2.2.2",
     "classnames": "^2.2.6",
     "lodash-es": "^4.17.15",
     "micro-page-core": "^0.4.3-alpha.0",
@@ -46,6 +47,7 @@
     "react-dom": "^16.10.2",
     "react-router": "5.1.2",
     "react-router-dom": "5.1.2",
+    "react-sortable-hoc": "^1.11.0",
     "teaness": "^4.0.11"
   },
   "gitHead": "a53b62eb0be71668dc7cf0d47a3266dbb7cc950b"

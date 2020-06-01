@@ -25,6 +25,8 @@ import { ResultProps } from 'antd/lib/result';
 import { observer } from 'mobx-react';
 import classnames from 'classnames';
 import lodash from 'lodash-es';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import arrayMove from 'array-move';
 import {
   PlusOutlined,
   DeleteOutlined,
@@ -86,6 +88,13 @@ import {
 } from './context';
 import { EntityStore } from './store';
 import { PageRender } from './RunTime';
+
+const SortableDivContainer = SortableContainer((props: any) => {
+  return <div {...props} />;
+});
+const SortableDiv = SortableElement((props: any) => {
+  return <div {...props} />;
+});
 
 export const fieldSvgTable: { [key in FieldType]: any } = {
   string: Stringsvg,
@@ -881,9 +890,37 @@ export const PageList: React.FC<PageListProps> = observer(() => {
     store.reset();
     setVisible(true);
   }, []);
+
   const basePath = useBasePath();
   const history = useHistory();
   const serviceContext = useContext(ServiceContext);
+  const [sorting, setSorting] = useState(false);
+  const onPageSortEnd = useCallback(
+    ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
+      const oldPages = entityStore.pages;
+      entityStore.pages = arrayMove(entityStore.pages, oldIndex, newIndex);
+      console.log(entityStore.pages);
+      setSorting(true);
+      core.service.movePage
+        .call(serviceContext, entityStore.id, oldIndex, newIndex)
+        .then(() => {
+          notification.success({
+            message: '页面排序成功',
+          });
+        })
+        .catch((err: Error) => {
+          entityStore.pages = oldPages;
+          notification.error({
+            message: '页面排序失败',
+            description: err.message,
+          });
+        })
+        .finally(() => {
+          setSorting(false);
+        });
+    },
+    [],
+  );
   const runtimeConfigContext = useContext(RuntimeConfigContext);
   const { run: addPage, loading } = useRequest(
     core.service.addPage.bind(serviceContext),
@@ -933,9 +970,18 @@ export const PageList: React.FC<PageListProps> = observer(() => {
               新建页面 <PlusOutlined />
             </div>
           </div>
-          <div className="micro-page-list">
-            {entityStore.pages?.map(page => (
-              <div key={page.id} className="micro-mask-layout">
+          <SortableDivContainer
+            axis="x"
+            onSortEnd={onPageSortEnd}
+            className="micro-page-list"
+          >
+            {entityStore.pages?.map((page, index) => (
+              <SortableDiv
+                index={index}
+                disabled={sorting}
+                key={page.id}
+                className="micro-mask-layout"
+              >
                 <div
                   className="micro-card"
                   onClick={() => {
@@ -1080,9 +1126,9 @@ export const PageList: React.FC<PageListProps> = observer(() => {
                     icon={<DeleteOutlined />}
                   />
                 </div>
-              </div>
+              </SortableDiv>
             ))}
-          </div>
+          </SortableDivContainer>
         </Decision.Case>
       </Decision>
 
