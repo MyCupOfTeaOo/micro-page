@@ -1,6 +1,6 @@
 {
   "name": "micro-page-react",
-  "version": "0.4.2",
+  "version": "0.4.3-alpha.0",
   "description": "react page configurable",
   "main": "./es/index.js",
   "module": "./es/index.js",
@@ -38,7 +38,7 @@
     "antd": "^4.1.5",
     "classnames": "^2.2.6",
     "lodash-es": "^4.17.15",
-    "micro-page-core": "^0.4.0",
+    "micro-page-core": "^0.4.3-alpha.0",
     "mobx": "^5.14.2",
     "mobx-react": "^6.1.4",
     "react": "^16.10.2",
