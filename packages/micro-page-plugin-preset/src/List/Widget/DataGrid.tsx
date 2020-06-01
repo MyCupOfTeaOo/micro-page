@@ -227,10 +227,13 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
               return (
                 <span className="list-btn-group">
                   {mySource.grid.operationConfig?.map((config, i) => (
-                    <span key={i} onClick={() => {
-                      setVisibleKey("vitualCol")
-                      setCurVistualOperate(config);
-                    }}>
+                    <span
+                      key={i}
+                      onClick={() => {
+                        setVisibleKey('vitualCol');
+                        setCurVistualOperate(config);
+                      }}
+                    >
                       <Operation mode="dev" config={config} rowData={data} />
                     </span>
                   ))}
@@ -461,7 +464,13 @@ const DataGridConfig: React.FC<DataGridProps> = () => {
               !curVistualOperate || visibleKey !== 'vitualCol',
           })}
         >
-          <div className="sidebar-title">
+          <div
+            className="sidebar-title"
+            style={{
+              height: (BaseGrid.defaultProps?.headerHeight || 56) + 1,
+              lineHeight: (BaseGrid.defaultProps?.headerHeight || 56) + 1,
+            }}
+          >
             <span className="ellipsis">{curVistualOperate?.name}</span>
             <MenuUnfoldOutlined
               onClick={() => {
