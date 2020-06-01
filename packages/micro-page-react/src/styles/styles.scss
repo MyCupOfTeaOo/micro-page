@@ -172,6 +172,7 @@ $success: $green-5;
   position: absolute;
   right: 0;
   transform: translateY(-200%);
+  
 }
 
 .ant-btn.micro-header-share-btn,
@@ -179,7 +180,9 @@ $success: $green-5;
   position: absolute;
   right: 0;
   top: 0;
-  transform: translateY(-8px);
+  height: 20px !important;
+  line-height: 20px !important;
+  padding: 0 !important;
 }
 
 .micro-header-shrink {
@@ -192,6 +195,9 @@ $success: $green-5;
     right: 0;
     top: 0;
     transform: translateY(200%);
+    height: 40px !important;
+    line-height: 40px !important;
+    padding: 4.9px 0 !important;
   }
 }
 
