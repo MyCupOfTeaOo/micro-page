@@ -38,7 +38,7 @@ export const PageContext = createContext<{
   };
 }>({} as any);
 
-export const PageConfigContext = createContext<{
+export const RuntimeConfigContext = createContext<{
   getReactEntityRenderText(entityId: string): string;
   getReactPageRenderText(entityId: string, pageId: string): string;
 }>({

@@ -76,7 +76,7 @@ import {
   EntityContext,
   PageContext,
   ServiceContext,
-  PageConfigContext,
+  RuntimeConfigContext,
 } from './context';
 import { EntityStore } from './store';
 import { PageRender } from './RunTime';
@@ -186,6 +186,7 @@ export const EntityList: React.FC<EntityListProps> = () => {
       },
     },
   );
+  const runtimeConfigContext = useContext(RuntimeConfigContext);
   if (loadingEntities) {
     return <Loading tip="加载实体列表中" />;
   }
@@ -214,21 +215,35 @@ export const EntityList: React.FC<EntityListProps> = () => {
             />
             <div className="micro-body">
               {entities?.map(entity => (
-                <div
-                  key={entity.id}
-                  className="micro-card"
-                  onClick={() => {
-                    history.push({
-                      pathname: join(basePath, entity.id),
-                    });
-                  }}
-                >
-                  <img className="cover" alt="封面" src={coverImg} />
-                  <div className="content center">
-                    <h4 className="ellipsis">{entity.name}</h4>
-                    <div className="ellipsis desc">
-                      {entity.desc || '暂无描述'}
+                <div key={entity.id} className="micro-mask-layout">
+                  <div
+                    key={entity.id}
+                    className="micro-card"
+                    onClick={() => {
+                      history.push({
+                        pathname: join(basePath, entity.id),
+                      });
+                    }}
+                  >
+                    <img className="cover" alt="封面" src={coverImg} />
+                    <div className="content center">
+                      <h4 className="ellipsis">{entity.name}</h4>
+                      <div className="ellipsis desc">
+                        {entity.desc || '暂无描述'}
+                      </div>
                     </div>
+                  </div>
+                  <div className="micro-card-btns">
+                    <CopyToClipboard
+                      text={runtimeConfigContext.getReactEntityRenderText(
+                        entity.id,
+                      )}
+                      onCopy={() => {
+                        message.success('拷贝成功');
+                      }}
+                    >
+                      <Button block icon={<ShareAltOutlined />} />
+                    </CopyToClipboard>
                   </div>
                 </div>
               ))}
@@ -863,7 +878,7 @@ export const PageList: React.FC<PageListProps> = observer(() => {
   const basePath = useBasePath();
   const history = useHistory();
   const serviceContext = useContext(ServiceContext);
-  const pageConfigContext = useContext(PageConfigContext);
+  const runtimeConfigContext = useContext(RuntimeConfigContext);
   const { run: addPage, loading } = useRequest(
     core.service.addPage.bind(serviceContext),
     {
@@ -1002,7 +1017,7 @@ export const PageList: React.FC<PageListProps> = observer(() => {
                     icon={<CopyOutlined />}
                   />
                   <CopyToClipboard
-                    text={pageConfigContext.getReactPageRenderText(
+                    text={runtimeConfigContext.getReactPageRenderText(
                       entityStore.id,
                       page.id,
                     )}
@@ -1172,7 +1187,7 @@ export const EntityEditHeader: React.FC<EntityEditHeaderProps> = observer(
       },
     });
     useChain(edited ? [springRef, transRef] : [transRef, springRef], [0, 0.4]);
-
+    const runtimeConfigContext = useContext(RuntimeConfigContext);
     return (
       <PageHeader
         className="micro-header"
@@ -1293,6 +1308,14 @@ export const EntityEditHeader: React.FC<EntityEditHeaderProps> = observer(
           </Decision>
         }
       >
+        <CopyToClipboard
+          text={runtimeConfigContext.getReactEntityRenderText(entityStore.id)}
+          onCopy={() => {
+            message.success('拷贝成功');
+          }}
+        >
+          <Button block icon={<ShareAltOutlined />} />
+        </CopyToClipboard>
         <div className="micro-header-img">
           <img src={coverImg} alt="content" width="100%" />
         </div>
@@ -1376,7 +1399,7 @@ const PageEdit: React.FC<PageEditProps> = () => {
 
   const [shrink, setShrink] = useLocalStorage('pageheader', false);
   const template = useSearchTemplate(page?.key);
-  const pageConfigContext = useContext(PageConfigContext);
+  const runtimeConfigContext = useContext(RuntimeConfigContext);
 
   // 注入上下文
   useEffect(() => {
@@ -1452,7 +1475,10 @@ const PageEdit: React.FC<PageEditProps> = () => {
             className="micro-header-shrink-btn"
           />
           <CopyToClipboard
-            text={pageConfigContext.getReactPageRenderText(entityStore.id, id)}
+            text={runtimeConfigContext.getReactPageRenderText(
+              entityStore.id,
+              id,
+            )}
             onCopy={() => {
               message.success('拷贝成功');
             }}

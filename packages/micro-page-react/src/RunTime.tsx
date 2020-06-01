@@ -177,12 +177,16 @@ const EntityRender: React.FC<EntityRenderProps> = ({
 
   const filterPageRoutes = pageRoutes.filter(pageRoute => pageRoute.route);
   return (
-    <Switch>
-      <Decision actual={!filterPageRoutes.length}>
-        <Decision.Case expect>{pageRoutesNotFound}</Decision.Case>
-        <Decision.Case expect={false}>
+    <Decision actual={!filterPageRoutes.length}>
+      <Decision.Case expect>{pageRoutesNotFound}</Decision.Case>
+      <Decision.Case expect={false}>
+        <Switch>
           {filterPageRoutes.map(pageRoute => (
-            <Route exact path={join(basePath, pageRoute.route?.pathname!)}>
+            <Route
+              key={pageRoute.pageId}
+              exact
+              path={join(basePath, pageRoute.route?.pathname!)}
+            >
               <PageRender
                 basePath={join(basePath, pageRoute.route?.pathname!)}
                 core={core}
@@ -196,9 +200,9 @@ const EntityRender: React.FC<EntityRenderProps> = ({
               pathname: join(basePath, filterPageRoutes[0].route?.pathname!),
             }}
           />
-        </Decision.Case>
-      </Decision>
-    </Switch>
+        </Switch>
+      </Decision.Case>
+    </Decision>
   );
 };
 
