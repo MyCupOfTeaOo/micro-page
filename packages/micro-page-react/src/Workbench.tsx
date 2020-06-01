@@ -43,7 +43,15 @@ import {
   useParams,
   Link,
 } from 'react-router-dom';
-import { Decision, useStore, useForm, vertical, Show, Select } from 'teaness';
+import {
+  Decision,
+  useStore,
+  useForm,
+  vertical,
+  Show,
+  Select,
+  useValue,
+} from 'teaness';
 import MicroPageCore from 'micro-page-core';
 import { UpdatePage } from 'micro-page-core/es/Service';
 import { Page, Template, Field, FieldType } from 'micro-page-core/es/typings';
@@ -1312,7 +1320,6 @@ const PageEdit: React.FC<PageEditProps> = () => {
   const entityStore = useEntityStore();
   const { id } = useParams<{ id: string }>();
   const serviceContext = useContext(ServiceContext);
-
   const { data: page, setData: setPage, loading = true } = useRequest(
     core.service.getPage.bind(serviceContext),
     {
@@ -1320,6 +1327,7 @@ const PageEdit: React.FC<PageEditProps> = () => {
       first: true,
     },
   );
+
   const updatePage = useMemo(() => {
     return lodash.debounce(
       (
@@ -1364,7 +1372,34 @@ const PageEdit: React.FC<PageEditProps> = () => {
   const [shrink, setShrink] = useLocalStorage('pageheader', false);
   const template = useSearchTemplate(page?.key);
   const runtimeConfigContext = useContext(RuntimeConfigContext);
-
+  const [edited, setEdited] = useState(false);
+  const title = useValue(page?.title);
+  const [submitting, setSubmitting] = useState(false);
+  const desc = useValue(page?.desc);
+  const submit = useCallback(() => {
+    if (!title.value) {
+      message.error('页面名称不能为空');
+      return;
+    }
+    setSubmitting(true);
+    setPage(prevPage => {
+      if (prevPage) {
+        const thePage = {
+          ...prevPage,
+          title: title.value!,
+          desc: desc.value,
+        };
+        updatePage([entityStore.id, thePage], {
+          onFinish() {
+            setEdited(false);
+            setSubmitting(false);
+          },
+        });
+        setTimeout(updatePage.flush);
+        return thePage;
+      }
+    });
+  }, []);
   // 注入上下文
   useEffect(() => {
     if (template) {
@@ -1416,8 +1451,115 @@ const PageEdit: React.FC<PageEditProps> = () => {
           className={classnames('micro-header', {
             'micro-header-shrink': shrink,
           })}
-          title={page?.title}
-          subTitle={template.name}
+          title={
+            <Decision actual={edited}>
+              <Decision.Case expect>
+                <Input
+                  value={title.value}
+                  onChange={e => {
+                    title.value = e.target.value;
+                  }}
+                  size="small"
+                />
+              </Decision.Case>
+              <Decision.Case expect={false}>{page?.title}</Decision.Case>
+            </Decision>
+          }
+          subTitle={
+            <Show actual={edited} expect={false}>
+              {template.name}
+            </Show>
+          }
+          extra={
+            page?.id && !shrink ? (
+              <Decision actual={edited}>
+                <Decision.Case expect>
+                  <div className="done">
+                    <Space>
+                      <Button
+                        onClick={() => setEdited(false)}
+                        loading={submitting}
+                      >
+                        取消
+                      </Button>
+                      <Button
+                        type="primary"
+                        onClick={submit}
+                        loading={submitting}
+                      >
+                        完成
+                      </Button>
+                    </Space>
+                  </div>
+                </Decision.Case>
+                <Decision.Case expect={false}>
+                  <div>
+                    <Button
+                      type="primary"
+                      style={{
+                        marginRight: 8,
+                      }}
+                      onClick={() => {
+                        setEdited(true);
+                        title.value = page.title;
+                        desc.value = page.desc;
+                      }}
+                    >
+                      修改简介
+                    </Button>
+                    <Button
+                      danger
+                      type="primary"
+                      onClick={() => {
+                        Modal.confirm({
+                          icon: <ExclamationCircleOutlined />,
+                          content: (
+                            <span>
+                              确定要删除页面
+                              <strong className="dnager">{page.title}</strong>吗
+                            </span>
+                          ),
+                          onOk() {
+                            return core.service.deletePage
+                              .call(serviceContext, entityStore.id, page.id)
+                              .then(() => {
+                                entityStore.deletePage(page.id);
+                                notification.success({
+                                  message: '删除页面成功',
+                                  placement: 'bottomRight',
+                                  description: (
+                                    <span>
+                                      页面
+                                      <strong className="danger">
+                                        {page.title}
+                                      </strong>
+                                      已被删除
+                                    </span>
+                                  ),
+                                });
+                              })
+                              .catch((err: Error) => {
+                                notification.error({
+                                  message: '删除页面失败',
+                                  description: err.message,
+                                  placement: 'bottomRight',
+                                });
+                                return Promise.reject(err);
+                              });
+                          },
+                        });
+                      }}
+                    >
+                      删除
+                      <DeleteOutlined />
+                    </Button>
+                  </div>
+                </Decision.Case>
+              </Decision>
+            ) : (
+              undefined
+            )
+          }
           onBack={() => history.goBack()}
         >
           <Show actual={shrink} expect>
@@ -1455,7 +1597,22 @@ const PageEdit: React.FC<PageEditProps> = () => {
             />
           </CopyToClipboard>
           <div className="micro-desc">
-            <div className="text-muti-line">{page?.desc}</div>
+            <Decision actual={edited}>
+              <Decision.Case expect>
+                <Input.TextArea
+                  value={desc.value}
+                  onChange={e => {
+                    desc.value = e.target.value;
+                  }}
+                  autoSize={{
+                    minRows: 4,
+                  }}
+                />
+              </Decision.Case>
+              <Decision.Case expect={false}>
+                <div className="text-muti-line">{page?.desc}</div>
+              </Decision.Case>
+            </Decision>
           </div>
           <div className="micro-header-img">
             <img src={template.cover} alt="content" width="100%" />
